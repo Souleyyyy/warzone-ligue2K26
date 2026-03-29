@@ -295,7 +295,13 @@
           <div class="eyebrow">Gestion</div>
           <h1 class="page-title">Ad<em>min</em></h1>
         </div>
-        <button class="btn-ghost" style="margin-bottom:6px;font-size:13px" onclick="App.logout()">⎋ Déconnexion</button>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap">
+          <button class="btn-ghost" style="font-size:13px" onclick="App.logout()">⎋ Déconnexion</button>
+          <button class="btn-ghost" style="font-size:12px;color:var(--gold);border-color:rgba(232,184,75,0.3)"
+            onclick="App.confirmReset(false)" title="Réinitialiser les scores uniquement">↺ Reset scores</button>
+          <button class="btn-ghost" style="font-size:12px;color:var(--red);border-color:rgba(232,75,106,0.3)"
+            onclick="App.confirmReset(true)" title="Tout effacer (scores + photos + logo)">⚠ Reset total</button>
+        </div>
       </div>
 
       <div class="admin-tabs">
