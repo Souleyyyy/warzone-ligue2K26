@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warzone League 2025</title>
+  <meta name="description" content="Site officiel Warzone League 2025 — Classement, Calendrier, Résultats en direct">
+  <meta name="theme-color" content="#07090f">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<!-- Ambient orbs -->
+<div class="orb-gold"></div>
+<div class="orb-red"></div>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" data-page="home">
+      WZ <div class="nav-logo-pill">2025</div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" data-page="home">Accueil</a></li>
+      <li><a href="#" data-page="classement">Classement</a></li>
+      <li><a href="#" data-page="calendrier">Calendrier</a></li>
+      <li><a href="#" data-page="joueurs">Joueurs</a></li>
+      <li><a href="#" data-page="reglement">Règlement</a></li>
+      <li><a href="#" data-page="admin" class="nav-admin">Admin</a></li>
+    </ul>
+    <button class="nav-burger" onclick="App.toggleMobileMenu?.() || document.querySelector('.nav-mobile')?.classList.toggle('open')" aria-label="Menu">☰</button>
+  </div>
+  <!-- Mobile nav -->
+  <div class="nav-mobile">
+    <a href="#" data-page="home">Accueil</a>
+    <a href="#" data-page="classement">Classement</a>
+    <a href="#" data-page="calendrier">Calendrier</a>
+    <a href="#" data-page="joueurs">Joueurs</a>
+    <a href="#" data-page="reglement">Règlement</a>
+    <a href="#" data-page="admin" class="nav-admin">Admin</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════
+     HOME
+══════════════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div id="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-fade"></div>
+
+    <div class="hero-main">
+      <div id="hero-logo-container"></div>
+
+      <h1 class="hero-title">
+        MASTER<br>
+        <span class="t-gold">KILL</span><br>
+        <span class="t-outline">LEAGUE</span>
+      </h1>
+
+      <p class="hero-sub">
+        13 joueurs · 13 journées · 1 champion.<br>
+        Suis le classement en direct et consulte le calendrier des rencontres.
+      </p>
+
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="App.go('classement')">Voir le classement →</button>
+        <button class="btn-ghost"   onclick="App.go('calendrier')">Calendrier</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-stats">
+        <div class="hstat fu d1">
+          <div class="hstat-label">Parties jouées</div>
+          <div class="hstat-value" id="hs-parties">0</div>
+          <div class="hstat-sub">sur 39 au total</div>
+        </div>
+        <div class="hstat fu d2">
+          <div class="hstat-label">Joueurs</div>
+          <div class="hstat-value" id="hs-joueurs">13</div>
+          <div class="hstat-sub">en compétition</div>
+        </div>
+        <div class="hstat fu d3">
+          <div class="hstat-label">Leader</div>
+          <div class="hstat-value" id="hs-leader" style="font-size:18px;padding-top:6px">—</div>
+          <div class="hstat-sub">en tête du classement</div>
+        </div>
+        <div class="hstat fu d4">
+          <div class="hstat-label">Points leader</div>
+          <div class="hstat-value" id="hs-pts">0</div>
+          <div class="hstat-sub">points cumulés</div>
+        </div>
+      </div>
+
+      <!-- Next + Podium -->
+      <div class="hero-cols fu d5">
+        <div class="next-card">
+          <div class="next-label"><div class="next-dot"></div>Prochaine journée</div>
+          <div id="next-content"><div style="color:var(--text2);font-size:14px;padding:10px 0">Chargement…</div></div>
+        </div>
+        <div class="podium-card">
+          <div class="podium-label">Top 3 du classement</div>
+          <div class="podium-list" id="podium-list">
+            <div style="color:var(--text2);font-size:14px">Aucune partie jouée pour le moment</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CLASSEMENT
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-classement">
+  <div class="container">
+    <div class="page-hdr">
+      <div class="eyebrow">Saison 2025</div>
+      <h1 class="page-title">Classe<em>ment</em></h1>
+      <div style="display:flex;gap:32px;margin-top:18px;flex-wrap:wrap">
+        <div>
+          <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">Parties jouées</div>
+          <div style="font-family:var(--font-title);font-size:26px;font-weight:800;color:var(--gold)" id="cl-parties">0</div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">Leader</div>
+          <div style="font-family:var(--font-title);font-size:26px;font-weight:800;color:#fff" id="cl-leader">—</div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">Kills leader</div>
+          <div style="font-family:var(--font-title);font-size:26px;font-weight:800;color:var(--text)" id="cl-kills">0</div>
+        </div>
+        <div>
+          <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:4px">Points leader</div>
+          <div style="font-family:var(--font-title);font-size:26px;font-weight:800;color:var(--gold)" id="cl-pts">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-head">
+        <div>#</div>
+        <div style="text-align:left">Joueur</div>
+        <div>Parties</div>
+        <div>Kills</div>
+        <div>Points</div>
+        <div></div>
+        <div>Moy.</div>
+        <div>Statut</div>
+      </div>
+      <div id="rank-rows"></div>
+    </div>
+    <div class="rank-note">// Score = kills validés + bonus (1er+60 · 2e+40 · 3e+20 · 4e+10) ± sanctions · Mis à jour automatiquement</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CALENDRIER
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-calendrier">
+  <div class="container">
+    <div class="page-hdr">
+      <div class="eyebrow">13 Journées · Rotation parfaite</div>
+      <h1 class="page-title">Calen<em>drier</em></h1>
+      <p style="color:var(--text2);font-size:14px;margin-top:8px">3 parties de 4 joueurs · 1 exempté par journée · <span style="color:var(--gold)">★ = TOP 3 (Ali, Sofiane, Mehdi)</span> · Statut en direct</p>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     JOUEURS
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-joueurs">
+  <div class="container">
+    <div class="page-hdr">
+      <div class="eyebrow">13 Compétiteurs</div>
+      <h1 class="page-title">Jou<em>eurs</em></h1>
+    </div>
+    <div class="players-grid" id="players-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     RÈGLEMENT
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-reglement">
+  <div class="container">
+    <div class="page-hdr">
+      <div class="eyebrow">Officiel</div>
+      <h1 class="page-title">Règle<em>ment</em></h1>
+    </div>
+    <div class="rules-grid">
+
+      <div class="rule-section">
+        <div class="rule-section-head">⚙️ Format de jeu</div>
+        <div class="rule-item"><span class="rule-dot">●</span>12 joueurs par journée · 1 exempté · Rotation parfaite sur 13 journées</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Chaque joueur est exempté exactement 1 fois — équité totale</div>
+        <div class="rule-item"><span class="rule-dot">●</span>3 parties de 4 joueurs · 5 manches par partie</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Classement dans une partie : par total de kills sur les 5 manches</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Égalité → plus grand nombre de kills sur 1 seule manche</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Les 3 parties peuvent se jouer à des horaires différents</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Partage d'écran obligatoire · Enregistrement requis en cas de litige</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Validation : chaque partie doit être marquée "Jouée ✅" pour être comptabilisée</div>
+      </div>
+
+      <div class="rule-section">
+        <div class="rule-section-head">🏆 Système de points</div>
+        <div class="rule-item"><span class="rule-dot" style="color:var(--gold)">●</span><span style="color:var(--gold);font-weight:600">🥇 1er</span> — <strong>+60 pts</strong> bonus + total kills</div>
+        <div class="rule-item"><span class="rule-dot" style="color:#c0c0cd">●</span><span style="color:#c0c0cd;font-weight:600">🥈 2e</span> &nbsp;— <strong>+40 pts</strong> bonus + total kills</div>
+        <div class="rule-item"><span class="rule-dot" style="color:#cd7f32">●</span><span style="color:#cd7f32;font-weight:600">🥉 3e</span> &nbsp;— <strong>+20 pts</strong> bonus + total kills</div>
+        <div class="rule-item"><span class="rule-dot">●</span><strong>4e</strong> &nbsp;&nbsp;&nbsp;— <strong>+10 pts</strong> bonus + total kills</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Exemple : 1er avec 43 kills → <span style="color:var(--gold);font-weight:600">43 + 60 = 103 pts</span></div>
+        <div class="rule-item"><span class="rule-dot">●</span>Participation : minimum 1 · maximum 3 Master Kills par semaine</div>
+      </div>
+
+      <div class="rule-section">
+        <div class="rule-section-head">✅ Droits des joueurs</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Toute arme du jeu autorisée</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Pas d'obligation de réanimer · Conditions dangereuses = droit de ne pas réanimer</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Récupérer un kill de coéquipier après réanimation = autorisé</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Achat largage / drone / frappe = non obligatoire</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Réanimation au shop = aucun bonus de points</div>
+      </div>
+
+      <div class="rule-section">
+        <div class="rule-section-head">⚠️ Obligations</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Temporisation obligatoire si dernier en vie — pas de suicide ni de charge kamikaze</div>
+        <div class="rule-item"><span class="rule-dot">●</span>En parachute et dernier en vie → attendre qu'au moins 1 coéquipier réapparaisse</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Toute indisponibilité doit être signalée au maximum 2h avant la journée</div>
+      </div>
+
+      <div class="rule-section" style="grid-column:1/-1">
+        <div class="rule-section-head">🚫 Sanctions</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
+          <div class="rule-item"><span class="rule-dot">●</span>Kill à terre d'un adversaire par un coéquipier<span class="rule-sanct">-10 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Absence de temporisation (dernier en vie)<span class="rule-sanct">-5 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Crash volontaire parachute (dernier en vie)<span class="rule-sanct">-15 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Absence non justifiée (moins de 2h avant)<span class="rule-sanct">-20 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>No-show sans prévenir<span class="rule-sanct">-30 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Insuffisance de participation (moins d'1/semaine)<span class="rule-sanct">-15 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Abandon en cours de journée déjà lancée<span class="rule-sanct">-15 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Mensonge sur le nombre de kills<span class="rule-sanct">-20 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Triche (Cronus) / Exploitation de bug<span class="rule-sanct">-50 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Lancement mode décontracté (tous les joueurs présents)<span class="rule-sanct">-100 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Pollution du groupe de discussion (après vote)<span class="rule-sanct">-5 pts</span></div>
+          <div class="rule-item"><span class="rule-dot">●</span>Indisponibilité journée suivante non signalée<span class="rule-sanct">-15 pts</span></div>
+        </div>
+      </div>
+
+      <div class="rule-section">
+        <div class="rule-section-head">🏅 Phase Finale</div>
+        <div class="rule-item"><span class="rule-dot" style="color:var(--green)">●</span><span style="color:var(--green)">1er → 6e</span> — Qualifiés directement pour le <strong>Final 8</strong></div>
+        <div class="rule-item"><span class="rule-dot" style="color:var(--gold)">●</span><span style="color:var(--gold)">7e & 8e</span> — <strong>Play-In Final</strong> (en attente)</div>
+        <div class="rule-item"><span class="rule-dot" style="color:var(--red)">●</span><span style="color:var(--red)">9e → 12e</span> — <strong>Master Play-In</strong> · les 2 premiers rejoignent le barrage</div>
+        <div class="rule-item"><span class="rule-dot">●</span>Final 8 → 2 groupes de 4 → <strong>Grande Finale à 4</strong></div>
+      </div>
+
+      <div class="rule-section">
+        <div class="rule-section-head">👥 Contacts Officiels</div>
+        <div class="rule-item"><span class="rule-dot">●</span><span style="color:var(--gold);font-weight:600">Commissaire</span> : M. Adjimal — contentieux sur le déroulement des parties (en privé)</div>
+        <div class="rule-item"><span class="rule-dot">●</span><span style="color:var(--gold);font-weight:600">Psychologue</span> : Mehdy Daniel — réclamations sur les règles (en privé)</div>
+        <div class="rule-item"><span class="rule-dot">●</span><span style="color:var(--gold);font-weight:600">Arbitre</span> : Mandaté à chaque journée pour surveiller le Master Kill</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ADMIN
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-admin">
+
+  <!-- Lock screen -->
+  <div class="admin-lock" id="admin-lock">
+    <div class="lock-box">
+      <div class="lock-icon">🔐</div>
+      <div class="lock-title">Zone Admin</div>
+      <div class="lock-sub">// accès restreint · Warzone League</div>
+      <label class="form-label" for="admin-pw">Mot de passe</label>
+      <input class="form-input" type="password" id="admin-pw" placeholder="••••••••••••">
+      <div class="login-err" id="login-err">Mot de passe incorrect.</div>
+      <button class="btn-primary" style="width:100%" onclick="App.tryLogin()">Accéder →</button>
+    </div>
+  </div>
+
+  <!-- Panel -->
+  <div class="admin-panel" id="admin-panel">
+    <div class="container">
+      <div class="page-hdr" style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+        <div>
+          <div class="eyebrow">Gestion</div>
+          <h1 class="page-title">Ad<em>min</em></h1>
+        </div>
+        <button class="btn-ghost" style="margin-bottom:6px;font-size:13px" onclick="App.logout()">⎋ Déconnexion</button>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="import">Import Excel</button>
+        <button class="admin-tab" data-tab="saisie">Saisie manuelle</button>
+        <button class="admin-tab" data-tab="sanctions">Sanctions</button>
+        <button class="admin-tab" data-tab="photos">Photos & Logo</button>
+      </div>
+
+      <!-- Import -->
+      <div class="tab-content active" data-tab="import">
+        <div class="drop-zone" id="drop-zone">
+          <div class="drop-icon">📊</div>
+          <div class="drop-title">Importer le fichier Excel</div>
+          <div class="drop-sub">// warzone_league_final_v3.xlsx · Glisser-déposer ou cliquer</div>
+          <button class="btn-primary" onclick="event.stopPropagation();document.getElementById('xl-file').click()">
+            Choisir le fichier
+          </button>
+          <div class="drop-status" id="drop-status"></div>
+        </div>
+        <input type="file" id="xl-file" accept=".xlsx,.xls" style="display:none">
+        <p style="font-family:var(--font-mono);font-size:11px;color:var(--text3);letter-spacing:1px;margin-bottom:48px">
+          // Après import : classement, calendrier et stats se mettent à jour automatiquement · Les données sont sauvegardées dans ce navigateur
+        </p>
+      </div>
+
+      <!-- Saisie -->
+      <div class="tab-content" data-tab="saisie">
+        <p style="font-family:var(--font-mono);font-size:11px;color:var(--text3);letter-spacing:1px;margin-bottom:20px">
+          // Saisir les kills par manche (G.1 à G.5) · Cocher "Marquer Jouée" pour valider et comptabiliser dans le classement
+        </p>
+        <div id="kills-form"></div>
+      </div>
+
+      <!-- Sanctions -->
+      <div class="tab-content" data-tab="sanctions">
+        <p style="font-family:var(--font-mono);font-size:11px;color:var(--text3);letter-spacing:1px;margin-bottom:20px">
+          // Nombre négatif = pénalité (ex: -20) · Nombre positif = bonus · Les valeurs s'ajoutent aux sanctions existantes
+        </p>
+        <div class="sanc-grid" id="sanc-grid"></div>
+        <div style="padding-bottom:48px"></div>
+      </div>
+
+      <!-- Photos -->
+      <div class="tab-content" data-tab="photos">
+        <div id="photos-form"></div>
+        <div style="padding-bottom:48px"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-wrap" id="toasts"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
