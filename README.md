@@ -1,6 +1,6 @@
-# ⚔️ Warzone League 2025
+# ⚔️ Warzone League 2026
 
-Site officiel de la Warzone League 2025 — hébergé sur GitHub Pages.
+Site officiel de la Warzone League 2026 — hébergé sur GitHub Pages.
 
 ## 🚀 Mise en ligne sur GitHub Pages (5 minutes)
 
@@ -31,9 +31,9 @@ Adresse : `https://TON_USERNAME.github.io/warzone-league/`
 ---
 
 ## 🔐 Accès Admin
-**Mot de passe par défaut : `warzone2025`**
+**Mot de passe par défaut : `warzone2026`**
 
-Pour le changer → `js/app.js` → ligne `const PASS = 'warzone2025';`
+Pour le changer → `js/app.js` → ligne `const PASS = 'warzone2026';`
 
 ---
 
@@ -63,4 +63,4 @@ warzone-league/
 
 ---
 
-*Warzone League 2025 — Saison officielle*
+*Warzone League 2026 — Saison officielle*
