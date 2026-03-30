@@ -110,7 +110,21 @@ body {
 
 /* Mobile menu */
 .nav-burger { display: none; background: none; border: 1px solid var(--border); border-radius: var(--r-sm); padding: 7px 10px; cursor: pointer; color: var(--text2); font-size: 16px; }
-.nav-mobile { display: none; flex-direction: column; gap: 4px; padding: 12px 20px 16px; background: rgba(7,9,15,0.98); border-bottom: 1px solid var(--border); }
+.nav-mobile {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 20px 16px;
+  background: rgba(7,9,15,0.98);
+  border-bottom: 1px solid var(--border);
+  position: absolute;
+  top: var(--nav-h);
+  left: 0; right: 0;
+  z-index: 999;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
 .nav-mobile.open { display: flex; }
 .nav-mobile a { font-family: var(--font-body); font-size: 15px; font-weight: 500; color: var(--text2); text-decoration: none; padding: 10px 16px; border-radius: var(--r-sm); border: 1px solid transparent; transition: all 0.2s; }
 .nav-mobile a.active { color: var(--gold); background: var(--gold-glow); border-color: var(--gold-border); }
