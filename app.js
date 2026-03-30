@@ -466,11 +466,32 @@ const App = (() => {
 
   // ── INIT ───────────────────────────────────────────────────────────────────
   function init() {
-    // Nav
+    // Nav links (desktop + mobile)
     document.querySelectorAll('[data-page]').forEach(a=>
       a.addEventListener('click', e=>{ e.preventDefault(); go(a.dataset.page); })
     );
-    // Scroll
+
+    // Burger button mobile — wired directly in init (pas d'onclick inline)
+    const burgerBtn = document.getElementById('nav-burger-btn');
+    if (burgerBtn) {
+      burgerBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const mobileNav = document.querySelector('.nav-mobile');
+        if (mobileNav) mobileNav.classList.toggle('open');
+      });
+    }
+    // Fermer le menu mobile en cliquant ailleurs
+    document.addEventListener('click', function(e) {
+      const mobileNav = document.querySelector('.nav-mobile');
+      const burger    = document.getElementById('nav-burger-btn');
+      if (mobileNav && mobileNav.classList.contains('open')) {
+        if (!mobileNav.contains(e.target) && e.target !== burger) {
+          mobileNav.classList.remove('open');
+        }
+      }
+    });
+
+    // Scroll nav
     window.addEventListener('scroll', ()=>
       document.getElementById('nav')?.classList.toggle('scrolled', window.scrollY>20)
     );
