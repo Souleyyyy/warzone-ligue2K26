@@ -1,7 +1,7 @@
-// ── WARZONE LEAGUE 2025 — APP (v4 fixed) ────────────────────────────────────
+// ── WARZONE LEAGUE 2026 — APP (v4 fixed) ────────────────────────────────────
 const App = (() => {
 
-  const PASS = 'warzone2025';
+  const PASS = 'warzone2026';
   let adminOk   = sessionStorage.getItem('wz_ok')==='1';
   let curPage   = 'home';
   let activeTab = 'import';
@@ -55,7 +55,7 @@ const App = (() => {
     if (logoEl) {
       logoEl.innerHTML = logo
         ? `<img src="${logo}" alt="Warzone League" style="max-height:100px;max-width:280px;object-fit:contain">`
-        : `<div class="hero-tag"><div class="hero-tag-pulse"></div>WARZONE LEAGUE 2025</div>`;
+        : `<div class="hero-tag"><div class="hero-tag-pulse"></div>WARZONE LEAGUE 2026</div>`;
     }
     // Hero BG
     const heroBg = document.getElementById('hero-bg');
