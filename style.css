@@ -380,8 +380,8 @@ body {
 .rank-row.g2 { background: linear-gradient(90deg, rgba(192,192,205,0.04), transparent); }
 .rank-row.g3 { background: linear-gradient(90deg, rgba(205,127,50,0.04), transparent); }
 
-.rc { padding: 15px 0; text-align: center; }
-.rc:nth-child(2) { text-align: left; }
+.rc { padding: 15px 0; text-align: center; display: flex; align-items: center; justify-content: center; }
+.rc:nth-child(2) { text-align: left; justify-content: flex-start; }
 
 .rc-rank { font-family: var(--font-title); font-size: 19px; font-weight: 800; color: var(--text3); }
 .g1 .rc-rank { color: var(--gold); font-size: 21px; }
@@ -608,10 +608,21 @@ body {
   .players-grid { grid-template-columns: repeat(2,1fr); }
   .rules-grid { grid-template-columns: 1fr; }
   .sanc-grid { grid-template-columns: 1fr 1fr; }
+  .rank-head, .rank-row { grid-template-columns: 44px 1fr 60px 70px 88px; padding: 0 14px; }
+  .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
+  .rc-num { font-size: 12px; text-align: center; }
+  .rc-pts { font-size: 16px; }
 }
 @media(max-width:480px) {
-  .rank-head, .rank-row { grid-template-columns: 46px 1fr 75px 90px; }
+  .rank-head, .rank-row { grid-template-columns: 40px 1fr 56px 80px; }
   .rank-head>*:nth-child(n+5), .rank-row>*:nth-child(n+5) { display: none; }
+  .rc { padding: 12px 0; }
+  .rc-num { font-size: 12px; text-align: center; width: 100%; }
+  .rc-pts { font-size: 16px; text-align: right; }
+  .rc-rank { font-size: 16px; }
+  .rc-name { font-size: 14px; }
+  .rc-avatar { width: 28px; height: 28px; font-size: 11px; }
+  .rank-head { font-size: 8px; }
   .hero-title { font-size: 42px; letter-spacing: -1px; }
   .players-grid { grid-template-columns: repeat(2,1fr); }
 }
