@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-05T15:46:25.739Z",
+  "lastUpdate": "2026-04-05T15:53:03.200Z",
   "results": {
     "1": {
       "A": {
@@ -1784,5 +1784,7 @@
       }
     }
   },
-  "sanctions": {}
+  "sanctions": {
+    "Mehdi": -5
+  }
 }
