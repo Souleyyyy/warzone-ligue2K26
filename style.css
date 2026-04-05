@@ -599,7 +599,7 @@ body {
   .hero-cols { grid-template-columns: 1fr; }
 }
 @media(max-width:768px) {
-  .container { padding: 0 16px; }
+  .container { padding: 0 18px; }
   .nav-links { display: none; }
   .nav-burger { display: block; }
   .hero-title { font-size: 52px; }
@@ -608,55 +608,21 @@ body {
   .players-grid { grid-template-columns: repeat(2,1fr); }
   .rules-grid { grid-template-columns: 1fr; }
   .sanc-grid { grid-template-columns: 1fr 1fr; }
-
-  /* Classement : on abandonne la grille, on passe en flex simple */
-  .rank-head { display: none; }  /* Cache les headers de colonne */
-  .rank-row {
-    display: flex;
-    align-items: center;
-    padding: 10px 14px;
-    gap: 0;
-    grid-template-columns: unset;
-  }
-  /* Cache toutes les colonnes sauf rang, joueur, kills, points */
-  .rank-row > .rc:nth-child(3), /* Parties */
-  .rank-row > .rc:nth-child(6), /* Barre */
-  .rank-row > .rc:nth-child(7), /* Moy */
-  .rank-row > .rc:nth-child(8)  /* Statut */
-  { display: none; }
-
-  /* Rang */
-  .rank-row > .rc:nth-child(1) { width: 36px; flex-shrink: 0; justify-content: center; }
-  /* Joueur (nom + avatar) */
-  .rank-row > .rc:nth-child(2) { flex: 1; min-width: 0; }
-  /* Kills */
-  .rank-row > .rc:nth-child(4) {
-    width: 52px; flex-shrink: 0;
-    justify-content: center;
-    font-family: var(--font-mono); font-size: 13px; color: var(--text2);
-  }
-  /* Points */
-  .rank-row > .rc:nth-child(5) {
-    width: 64px; flex-shrink: 0;
-    justify-content: flex-end;
-    font-family: var(--font-title); font-size: 17px; font-weight: 800;
-  }
-
-  .rc-name { font-size: 15px; }
-  .rc-avatar { width: 32px; height: 32px; font-size: 12px; flex-shrink: 0; }
-  .rc-rank { font-size: 16px; }
+  .rank-head, .rank-row { grid-template-columns: 44px 1fr 60px 70px 88px; padding: 0 14px; }
+  .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
+  .rc-num { font-size: 12px; text-align: center; }
+  .rc-pts { font-size: 16px; }
 }
-
 @media(max-width:480px) {
-  .hero-title { font-size: 42px; letter-spacing: -1px; }
-  .players-grid { grid-template-columns: repeat(2,1fr); }
-
-  /* Encore un peu plus compact */
-  .rank-row { padding: 9px 12px; }
-  .rank-row > .rc:nth-child(1) { width: 30px; }
-  .rank-row > .rc:nth-child(4) { width: 44px; font-size: 12px; }
-  .rank-row > .rc:nth-child(5) { width: 58px; font-size: 16px; }
+  .rank-head, .rank-row { grid-template-columns: 40px 1fr 56px 80px; }
+  .rank-head>*:nth-child(n+5), .rank-row>*:nth-child(n+5) { display: none; }
+  .rc { padding: 12px 0; }
+  .rc-num { font-size: 12px; text-align: center; width: 100%; }
+  .rc-pts { font-size: 16px; text-align: right; }
+  .rc-rank { font-size: 16px; }
   .rc-name { font-size: 14px; }
   .rc-avatar { width: 28px; height: 28px; font-size: 11px; }
-  .rc-rank { font-size: 15px; }
+  .rank-head { font-size: 8px; }
+  .hero-title { font-size: 42px; letter-spacing: -1px; }
+  .players-grid { grid-template-columns: repeat(2,1fr); }
 }
