@@ -129,7 +129,7 @@ const WZ = (() => {
       state.results[j].C = readPartie(19, valC);
     }
     ss(K.data, state);
-    return true;
+    return { ok: 13, fail: 0 };
   }
 
   // ── Mutations ─────────────────────────────────────────────────────────────
@@ -189,7 +189,7 @@ const WZ = (() => {
     ];
     for (const url of urls) {
       try {
-        const res = await fetch(url);
+        const res = await fetch(url, { cache: 'no-store' });
         if (!res.ok) continue;
         const data = await res.json();
         if (data.results) {
