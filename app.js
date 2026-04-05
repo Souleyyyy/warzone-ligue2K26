@@ -444,12 +444,6 @@ const App = (() => {
     reader.readAsArrayBuffer(file);
   }
 
-  // ── TÉLÉCHARGER DATA.JSON ──────────────────────────────────────────────────
-  function downloadData() {
-    WZ.downloadJSON();
-    toast('data.json téléchargé ✓ — dépose-le sur GitHub !', 'ok');
-  }
-
   // ── RESET ──────────────────────────────────────────────────────────────────
   function confirmReset(all) {
     const msg = all
@@ -516,14 +510,6 @@ const App = (() => {
       dz.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('drag'); handleExcel(e.dataTransfer.files[0]); });
       document.getElementById('xl-file')?.addEventListener('change', e=>handleExcel(e.target.files[0]));
     }
-    // Charger les données depuis GitHub au démarrage (lecture publique, sans token)
-    WZ.loadFromGitHub().then(result => {
-      if (result.ok) {
-        render(curPage); // Rafraîchir la page avec les données GitHub
-        console.log('✓ Données chargées depuis GitHub');
-      }
-    });
-
     go('home');
   }
 
@@ -531,7 +517,7 @@ const App = (() => {
     init, go, toggleMobileMenu, closeMobileMenu,
     tryLogin, logout, renderTab,
     toggleVal, setKills, addSanc, clearSanc,
-    uploadPhoto, uploadLogo, confirmReset, downloadData
+    uploadPhoto, uploadLogo, confirmReset
   };
 })();
 
