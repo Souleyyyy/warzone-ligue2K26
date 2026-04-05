@@ -1,4 +1,4 @@
-// ── WARZONE LEAGUE 2025 — DATA LAYER ────────────────────────────────────────
+// ── WARZONE LEAGUE 2026 — DATA LAYER ────────────────────────────────────────
 const WZ = (() => {
 
   const NAMES = ["Erico","Sallah","Adjimal","Mika","Daniel","Mehdi","Ali","Florian",
