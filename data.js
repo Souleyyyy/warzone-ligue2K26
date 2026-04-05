@@ -179,24 +179,29 @@ const WZ = (() => {
     Object.values(K).forEach(k => { try { localStorage.removeItem(k); } catch {} });
   }
 
-  // ── Chargement depuis GitHub (CDN public, pas de token requis) ────────────
+  // ── Chargement depuis GitHub Pages (direct, pas de CDN, instantané) ────────
   async function loadFromGitHub() {
-    try {
-      const url = 'https://cdn.jsdelivr.net/gh/Souleyyyy/warzone-ligue2K26@main/data.json?t=' + Date.now();
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      if (data.results) {
-        state.results   = data.results;
-        state.sanctions = data.sanctions || {};
-        ss(K.data, state);
-        ss(K.sanc, state.sanctions);
-      }
-      return { ok: true };
-    } catch(e) {
-      // Silencieux : si GitHub indisponible, on garde les données localStorage
-      return { ok: false };
+    // On essaie d'abord GitHub Pages (instantané après deploy)
+    // puis jsDelivr en fallback
+    const urls = [
+      window.location.origin + '/warzone-ligue2K26/data.json?t=' + Date.now(),
+      'https://cdn.jsdelivr.net/gh/Souleyyyy/warzone-ligue2K26@main/data.json?t=' + Date.now()
+    ];
+    for (const url of urls) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) continue;
+        const data = await res.json();
+        if (data.results) {
+          state.results   = data.results;
+          state.sanctions = data.sanctions || {};
+          ss(K.data, state);
+          ss(K.sanc, state.sanctions);
+          return { ok: true };
+        }
+      } catch(e) { continue; }
     }
+    return { ok: false };
   }
 
   // ── Télécharger data.json ─────────────────────────────────────────────────
