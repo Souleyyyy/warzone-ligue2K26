@@ -179,8 +179,44 @@ const WZ = (() => {
     Object.values(K).forEach(k => { try { localStorage.removeItem(k); } catch {} });
   }
 
+  // ── Chargement depuis GitHub (CDN public, pas de token requis) ────────────
+  async function loadFromGitHub() {
+    try {
+      const url = 'https://cdn.jsdelivr.net/gh/Souleyyyy/warzone-ligue2K26@main/data.json?t=' + Date.now();
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if (data.results) {
+        state.results   = data.results;
+        state.sanctions = data.sanctions || {};
+        ss(K.data, state);
+        ss(K.sanc, state.sanctions);
+      }
+      return { ok: true };
+    } catch(e) {
+      // Silencieux : si GitHub indisponible, on garde les données localStorage
+      return { ok: false };
+    }
+  }
+
+  // ── Télécharger data.json ─────────────────────────────────────────────────
+  function downloadJSON() {
+    const payload = JSON.stringify({
+      version: 1,
+      lastUpdate: new Date().toISOString(),
+      results: state.results,
+      sanctions: ls(K.sanc, {})
+    }, null, 2);
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'data.json'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return {
     NAMES, TOP3, SCHEDULE, BONUS,
+    loadFromGitHub, downloadJSON,
     getStats, getJourneeStatus, getNextJournee, getTotalPartiesJouees,
     importExcel, setValidation, setKills,
     addSanction, clearSanction, getSanctions,
