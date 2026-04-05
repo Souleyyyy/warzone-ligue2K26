@@ -220,10 +220,13 @@ const WZ = (() => {
         if (!res.ok) continue;
         const data = await res.json();
         if (data.results) {
-          state.results   = data.results;
-          state.sanctions = data.sanctions || {};
+          state.results = data.results;
+          // N'écraser les sanctions que si le JSON en contient vraiment
+          if (data.sanctions && Object.keys(data.sanctions).length > 0) {
+            state.sanctions = data.sanctions;
+            ss(K.sanc, data.sanctions);
+          }
           ss(K.data, state);
-          ss(K.sanc, state.sanctions);
           return { ok: true };
         }
       } catch(e) { continue; }
@@ -233,11 +236,15 @@ const WZ = (() => {
 
   // ── Télécharger data.json ─────────────────────────────────────────────────
   function downloadJSON() {
+    // Fusionner les sanctions de localStorage ET celles chargées depuis GitHub
+    const sanctionsLocal  = ls(K.sanc, {});
+    const sanctionsState  = state.sanctions || {};
+    const sanctionsMerged = Object.assign({}, sanctionsState, sanctionsLocal);
     const payload = JSON.stringify({
       version: 1,
       lastUpdate: new Date().toISOString(),
       results: state.results,
-      sanctions: ls(K.sanc, {})
+      sanctions: sanctionsMerged
     }, null, 2);
     const blob = new Blob([payload], { type: 'application/json' });
     const url  = URL.createObjectURL(blob);
