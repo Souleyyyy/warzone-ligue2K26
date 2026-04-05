@@ -1,10 +1,9 @@
-// ── WARZONE LEAGUE 2025 — DATA LAYER (v5 - GitHub sync) ─────────────────────
+// ── WARZONE LEAGUE 2025 — DATA LAYER (v6 - simple JSON sync) ────────────────
 const WZ = (() => {
 
   const REPO_OWNER = 'Souleyyyy';
   const REPO_NAME  = 'warzone-ligue2K26';
   const DATA_FILE  = 'data.json';
-  const API_BASE   = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`;
 
   const NAMES = ["Erico","Sallah","Adjimal","Mika","Daniel","Mehdi","Ali","Florian",
                  "Theo","Sofiane","Nassim","Souleymane","Okan"];
@@ -28,8 +27,8 @@ const WZ = (() => {
 
   const BONUS = {1:60, 2:40, 3:20, 4:10};
 
-  // ── Storage local (cache) ─────────────────────────────────────────────────
-  const K = {token:'wz_gh_token', photos:'wz_photos_v4', logo:'wz_logo_v4'};
+  // ── Photos/Logo en localStorage (pas besoin de sync, c'est visuel) ─────────
+  const K = { photos:'wz_photos_v4', logo:'wz_logo_v4' };
   const ls = (k,fb) => { try{const v=localStorage.getItem(k);return v?JSON.parse(v):fb;}catch{return fb;} };
   const ss = (k,v)  => { try{localStorage.setItem(k,JSON.stringify(v));}catch(e){console.warn(e);} };
 
@@ -43,15 +42,14 @@ const WZ = (() => {
         C:{validated:false,players:day.g3.map(n=>({name:n,kills:[0,0,0,0,0]}))},
       };
     });
-    return {results, sanctions:{}};
+    return { results, sanctions:{} };
   }
 
   let state = initState();
-  let _fileSha = ''; // SHA du fichier GitHub (requis pour les mises à jour)
 
-  // ── Chargement depuis GitHub ──────────────────────────────────────────────
-  // Utilise le CDN jsDelivr pour la lecture publique (pas besoin de token)
-  // URL: https://cdn.jsdelivr.net/gh/OWNER/REPO@main/data.json
+  // ── Chargement depuis GitHub (lecture publique via jsDelivr CDN) ──────────
+  // jsDelivr sert les fichiers GitHub en CDN public, sans token
+  // Cache busting avec timestamp pour toujours avoir la dernière version
   async function loadFromGitHub() {
     try {
       const url = `https://cdn.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@main/${DATA_FILE}?t=${Date.now()}`;
@@ -61,83 +59,35 @@ const WZ = (() => {
       if (data.results) {
         state.results   = data.results;
         state.sanctions = data.sanctions || {};
+        return { ok:true, lastUpdate: data.lastUpdate || '' };
       }
-      return {ok:true};
+      return { ok:false, error:'Format invalide' };
     } catch(err) {
-      console.warn('GitHub load failed, using local state:', err.message);
-      return {ok:false, error:err.message};
+      console.warn('Chargement GitHub échoué:', err.message);
+      return { ok:false, error: err.message };
     }
   }
 
-  // ── Sauvegarde vers GitHub (nécessite token) ──────────────────────────────
-  async function saveToGitHub() {
-    const token = getToken();
-    if (!token) return {ok:false, error:'no_token'};
-
-    try {
-      // 1. Récupérer le SHA actuel du fichier
-      const getRes = await fetch(API_BASE, {
-        headers: {
-          'Authorization': `token ${token}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      });
-
-      let sha = _fileSha;
-      if (getRes.ok) {
-        const fileInfo = await getRes.json();
-        sha = fileInfo.sha;
-        _fileSha = sha;
-      }
-
-      // 2. Préparer le contenu
-      const content = {
-        version: 1,
-        lastUpdate: new Date().toISOString(),
-        results: state.results,
-        sanctions: state.sanctions || {}
-      };
-      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))));
-
-      // 3. Pousser vers GitHub
-      const body = {
-        message: `Mise à jour résultats — ${new Date().toLocaleString('fr-FR')}`,
-        content: encoded,
-        sha: sha || undefined
-      };
-
-      const putRes = await fetch(API_BASE, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${token}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (!putRes.ok) {
-        const err = await putRes.json();
-        if (putRes.status === 401) return {ok:false, error:'bad_token'};
-        if (putRes.status === 409) return {ok:false, error:'conflict'};
-        throw new Error(err.message || `HTTP ${putRes.status}`);
-      }
-
-      const result = await putRes.json();
-      _fileSha = result.content?.sha || '';
-      return {ok:true};
-
-    } catch(err) {
-      console.error('GitHub save error:', err);
-      return {ok:false, error:err.message};
-    }
+  // ── Export JSON (pour télécharger et uploader sur GitHub) ─────────────────
+  function exportJSON() {
+    return JSON.stringify({
+      version: 1,
+      lastUpdate: new Date().toISOString(),
+      results: state.results,
+      sanctions: state.sanctions || {}
+    }, null, 2);
   }
 
-  // ── Token management ──────────────────────────────────────────────────────
-  function getToken()        { return localStorage.getItem(K.token) || ''; }
-  function setToken(token)   { localStorage.setItem(K.token, token); }
-  function clearToken()      { localStorage.removeItem(K.token); }
-  function hasToken()        { return !!getToken(); }
+  function downloadJSON() {
+    const content = exportJSON();
+    const blob = new Blob([content], { type:'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'data.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   // ── Calculs ───────────────────────────────────────────────────────────────
   const sumKills = arr => (arr||[]).reduce((s,k)=>s+(parseInt(k)||0),0);
@@ -153,7 +103,6 @@ const WZ = (() => {
     const sancs = state.sanctions || {};
     const map   = {};
     NAMES.forEach(n=>{ map[n]={name:n,kills:0,bonus:0,partiesJouees:0,sanction:0,total:0}; });
-
     SCHEDULE.forEach(day=>{
       ['A','B','C'].forEach(p=>{
         const partie = state.results[day.j]?.[p];
@@ -166,72 +115,46 @@ const WZ = (() => {
         });
       });
     });
-
     NAMES.forEach(n=>{
-      const s = sancs[n]||0;
-      map[n].sanction = s;
-      map[n].total    = map[n].kills + map[n].bonus + s;
+      const s=sancs[n]||0; map[n].sanction=s; map[n].total=map[n].kills+map[n].bonus+s;
     });
-
-    return Object.values(map)
-      .sort((a,b)=>b.total-a.total)
-      .map((p,i)=>({...p,rank:i+1}));
+    return Object.values(map).sort((a,b)=>b.total-a.total).map((p,i)=>({...p,rank:i+1}));
   }
 
   function getJourneeStatus(j) {
-    const r = state.results[j];
-    if (!r) return 'pending';
-    const v = ['A','B','C'].map(p=>r[p]?.validated);
-    if (v.every(Boolean)) return 'done';
-    if (v.some(Boolean))  return 'partial';
-    return 'pending';
+    const r=state.results[j]; if(!r)return 'pending';
+    const v=['A','B','C'].map(p=>r[p]?.validated);
+    if(v.every(Boolean))return 'done'; if(v.some(Boolean))return 'partial'; return 'pending';
   }
-
   function getNextJournee()        { return SCHEDULE.find(d=>getJourneeStatus(d.j)!=='done')||null; }
   function getTotalPartiesJouees() { return SCHEDULE.reduce((s,d)=>s+['A','B','C'].filter(p=>state.results[d.j]?.[p]?.validated).length,0); }
 
-  // ── Mutations (locales — appeler saveToGitHub() après) ───────────────────
-  function setValidation(j, p, v) {
-    if (!state.results[j]) state.results[j]={};
-    if (!state.results[j][p]) {
-      const day=SCHEDULE.find(d=>d.j===j);
-      const grp=p==='A'?day.g1:p==='B'?day.g2:day.g3;
+  // ── Mutations ─────────────────────────────────────────────────────────────
+  function setValidation(j,p,v) {
+    if(!state.results[j])state.results[j]={};
+    if(!state.results[j][p]){
+      const day=SCHEDULE.find(d=>d.j===j); const grp=p==='A'?day.g1:p==='B'?day.g2:day.g3;
       state.results[j][p]={validated:false,players:grp.map(n=>({name:n,kills:[0,0,0,0,0]}))};
     }
-    state.results[j][p].validated = v;
+    state.results[j][p].validated=v;
   }
-
-  function setKills(j, p, pi, kills) {
-    if (state.results[j]?.[p]?.players?.[pi]) {
-      state.results[j][p].players[pi].kills = kills;
-    }
+  function setKills(j,p,pi,kills) {
+    if(state.results[j]?.[p]?.players?.[pi]) state.results[j][p].players[pi].kills=kills;
   }
-
-  function addSanction(name, pts) {
-    if (!state.sanctions) state.sanctions = {};
-    state.sanctions[name] = (state.sanctions[name]||0) + pts;
-  }
-  function clearSanction(name) {
-    if (!state.sanctions) state.sanctions = {};
-    state.sanctions[name] = 0;
-  }
-  function getSanctions() { return state.sanctions || {}; }
+  function addSanction(name,pts) { if(!state.sanctions)state.sanctions={}; state.sanctions[name]=(state.sanctions[name]||0)+pts; }
+  function clearSanction(name)   { if(!state.sanctions)state.sanctions={}; state.sanctions[name]=0; }
+  function getSanctions()        { return state.sanctions||{}; }
 
   // ── Import Excel ──────────────────────────────────────────────────────────
-  const XL = {
-    A:{rows:[5,6,7,8],   val:'M3' },
-    B:{rows:[12,13,14,15],val:'M10'},
-    C:{rows:[19,20,21,22],val:'M17'},
-  };
+  const XL={A:{rows:[5,6,7,8],val:'M3'},B:{rows:[12,13,14,15],val:'M10'},C:{rows:[19,20,21,22],val:'M17'}};
   function cellVal(ws,addr){const c=ws[addr];if(!c)return null;return(c.v!==undefined&&c.v!==null)?c.v:(c.w||null);}
   function cellNum(ws,addr){return parseInt(cellVal(ws,addr))||0;}
   function cellStr(ws,addr){const v=cellVal(ws,addr);return(v!==null&&v!==undefined)?String(v).trim():'';}
 
   function importExcel(workbook) {
-    let ok=0, fail=0;
-    for (let j=1; j<=13; j++) {
-      const ws=workbook.Sheets[`J${j}`];
-      if (!ws){fail++;continue;}
+    let ok=0,fail=0;
+    for(let j=1;j<=13;j++){
+      const ws=workbook.Sheets[`J${j}`]; if(!ws){fail++;continue;}
       const valA=cellStr(ws,XL.A.val).includes('Jou');
       const valB=cellStr(ws,XL.B.val).includes('Jou');
       const valC=cellStr(ws,XL.C.val).includes('Jou');
@@ -239,10 +162,8 @@ const WZ = (() => {
         const players=[];
         rows.forEach(ri=>{
           const nameAddr=XLSX.utils.encode_cell({r:ri-1,c:1});
-          const rawName=cellStr(ws,nameAddr);
-          if(!rawName)return;
-          const name=rawName.replace(/^[★\*\s]+/,'').trim();
-          if(!name)return;
+          const rawName=cellStr(ws,nameAddr); if(!rawName)return;
+          const name=rawName.replace(/^[★\*\s]+/,'').trim(); if(!name)return;
           const kills=[2,3,4,5,6].map(c=>cellNum(ws,XLSX.utils.encode_cell({r:ri-1,c})));
           players.push({name,kills});
         });
@@ -258,14 +179,12 @@ const WZ = (() => {
   }
 
   // ── Reset ─────────────────────────────────────────────────────────────────
-  function resetData()    { state=initState(); }
-  function resetAll()     {
+  function resetData() { state=initState(); }
+  function resetAll()  {
     state=initState();
-    [K.photos,K.logo,'wz_photos_v2','wz_photos_v3','wz_logo_v2','wz_logo_v3']
-      .forEach(k=>{try{localStorage.removeItem(k);}catch{}});
+    [K.photos,K.logo].forEach(k=>{try{localStorage.removeItem(k);}catch{}});
   }
 
-  // ── Photos / Logo ─────────────────────────────────────────────────────────
   function savePhoto(name,dataUrl){const p=ls(K.photos,{});p[name]=dataUrl;ss(K.photos,p);}
   function getPhoto(name){return ls(K.photos,{})[name]||null;}
   function saveLogo(url){localStorage.setItem(K.logo,url);}
@@ -273,14 +192,13 @@ const WZ = (() => {
   function getState(){return state;}
 
   return {
-    NAMES, TOP3, SCHEDULE, BONUS,
-    loadFromGitHub, saveToGitHub,
-    getToken, setToken, clearToken, hasToken,
-    getStats, getJourneeStatus, getNextJournee, getTotalPartiesJouees,
-    importExcel, setValidation, setKills,
-    addSanction, clearSanction, getSanctions,
-    savePhoto, getPhoto, saveLogo, getLogo,
-    getState, sumKills, rankPartie,
-    resetData, resetAll
+    NAMES,TOP3,SCHEDULE,BONUS,
+    loadFromGitHub, exportJSON, downloadJSON,
+    getStats,getJourneeStatus,getNextJournee,getTotalPartiesJouees,
+    importExcel,setValidation,setKills,
+    addSanction,clearSanction,getSanctions,
+    savePhoto,getPhoto,saveLogo,getLogo,
+    getState,sumKills,rankPartie,
+    resetData,resetAll
   };
 })();
