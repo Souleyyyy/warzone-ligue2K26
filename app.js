@@ -444,12 +444,6 @@ const App = (() => {
     reader.readAsArrayBuffer(file);
   }
 
-  // ── TÉLÉCHARGER DATA.JSON ──────────────────────────────────────────────────
-  function downloadData() {
-    WZ.downloadJSON();
-    toast('data.json téléchargé ✓ — dépose-le sur GitHub pour partager !', 'ok');
-  }
-
   // ── RESET ──────────────────────────────────────────────────────────────────
   function confirmReset(all) {
     const msg = all
@@ -471,7 +465,7 @@ const App = (() => {
   }
 
   // ── INIT ───────────────────────────────────────────────────────────────────
-  function init() {
+  async function init() {
     // Nav links (desktop + mobile)
     document.querySelectorAll('[data-page]').forEach(a=>
       a.addEventListener('click', e=>{ e.preventDefault(); go(a.dataset.page); })
@@ -516,12 +510,17 @@ const App = (() => {
       dz.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('drag'); handleExcel(e.dataTransfer.files[0]); });
       document.getElementById('xl-file')?.addEventListener('change', e=>handleExcel(e.target.files[0]));
     }
-    // Charger les données depuis GitHub au démarrage
-    WZ.loadFromGitHub().then(r => {
-      if (r.ok) render(curPage);
-    });
+    // Charger les données depuis GitHub AVANT d'afficher la page
+    // cache:'no-store' dans WZ.loadFromGitHub() garantit la fraîcheur
+    await WZ.loadFromGitHub();
 
     go('home');
+  }
+
+  // ── TÉLÉCHARGER DATA.JSON ────────────────────────────────────────────────
+  function downloadData() {
+    WZ.downloadJSON();
+    toast('data.json téléchargé ✓ — dépose-le sur GitHub !', 'ok');
   }
 
   return {
