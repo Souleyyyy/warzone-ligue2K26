@@ -309,23 +309,47 @@
         <button class="admin-tab" data-tab="saisie">Saisie manuelle</button>
         <button class="admin-tab" data-tab="sanctions">Sanctions</button>
         <button class="admin-tab" data-tab="photos">Photos & Logo</button>
-        <button class="admin-tab" data-tab="sync">🔗 Synchronisation</button>
+        <button class="admin-tab" data-tab="publier">📡 Publier</button>
       </div>
 
       <!-- Import -->
       <div class="tab-content active" data-tab="import">
+
+        <!-- Zone dépôt Excel -->
         <div class="drop-zone" id="drop-zone">
           <div class="drop-icon">📊</div>
-          <div class="drop-title">Importer le fichier Excel</div>
-          <div class="drop-sub">// warzone_league_final_v3.xlsx · Glisser-déposer ou cliquer</div>
+          <div class="drop-title">Déposer le fichier Excel</div>
+          <div class="drop-sub">// warzone_league_final_v4.xlsx · Glisser-déposer ou cliquer</div>
           <button class="btn-primary" onclick="event.stopPropagation();document.getElementById('xl-file').click()">
-            Choisir le fichier
+            Choisir le fichier Excel
           </button>
           <div class="drop-status" id="drop-status"></div>
         </div>
         <input type="file" id="xl-file" accept=".xlsx,.xls" style="display:none">
-        <p style="font-family:var(--font-mono);font-size:11px;color:var(--text3);letter-spacing:1px;margin-bottom:48px">
-          // Après import : classement, calendrier et stats se mettent à jour automatiquement · Les données sont sauvegardées dans ce navigateur
+
+        <!-- Étape 2 : télécharger + publier -->
+        <div id="publish-section" style="display:none;margin-top:20px">
+          <div style="background:rgba(75,232,128,0.07);border:1px solid rgba(75,232,128,0.3);border-radius:14px;padding:20px 22px;margin-bottom:16px">
+            <div style="font-family:var(--font-title);font-size:15px;font-weight:700;color:var(--green);margin-bottom:6px">✓ Excel importé avec succès</div>
+            <div style="font-size:13px;color:var(--text2)">Télécharge le fichier ci-dessous puis dépose-le sur GitHub pour que tout le monde voit les résultats.</div>
+          </div>
+          <button class="btn-primary" style="width:100%;font-size:15px;padding:16px;margin-bottom:12px"
+            onclick="App.downloadData()">
+            ⬇ Télécharger data.json et publier
+          </button>
+          <div style="background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:14px 18px">
+            <div style="font-family:var(--font-title);font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px">📋 Ensuite sur GitHub :</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.9">
+              1. Va sur <strong style="color:var(--gold)">github.com/Souleyyyy/warzone-ligue2K26</strong><br>
+              2. Clique sur <code style="color:var(--gold);background:rgba(232,184,75,0.1);padding:1px 5px;border-radius:4px">data.json</code> → puis l'icône ✏️<br>
+              3. Clique <strong>Upload file</strong> → glisse le fichier téléchargé<br>
+              4. Clique <strong>Commit changes</strong> → ✅ tout le monde voit les données
+            </div>
+          </div>
+        </div>
+
+        <p style="font-family:var(--font-mono);font-size:11px;color:var(--text3);letter-spacing:1px;margin-top:14px;margin-bottom:48px">
+          // Workflow : Excel → Importer → Télécharger data.json → Uploader sur GitHub → Tout le monde voit les données
         </p>
       </div>
 
@@ -352,9 +376,9 @@
         <div style="padding-bottom:48px"></div>
       </div>
 
-      <!-- Synchronisation GitHub -->
-      <div class="tab-content" data-tab="sync">
-        <div id="sync-form"></div>
+      <!-- Publier -->
+      <div class="tab-content" data-tab="publier">
+        <div id="publier-form"></div>
         <div style="padding-bottom:48px"></div>
       </div>
 
