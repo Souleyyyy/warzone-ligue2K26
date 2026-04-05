@@ -1,4 +1,4 @@
-// ── WARZONE LEAGUE 2026 — DATA LAYER ────────────────────────────────────────
+// ── WARZONE LEAGUE 2025 — DATA LAYER ────────────────────────────────────────
 const WZ = (() => {
 
   const NAMES = ["Erico","Sallah","Adjimal","Mika","Daniel","Mehdi","Ali","Florian",
@@ -46,8 +46,16 @@ const WZ = (() => {
   const sumKills = arr => arr.reduce((s,k) => s + (parseInt(k)||0), 0);
 
   function rankPartie(players) {
-    const ranked = players.map(p => ({...p, total: sumKills(p.kills)}));
-    ranked.sort((a,b) => b.total - a.total);
+    const ranked = players.map(p => ({
+      ...p,
+      total:    sumKills(p.kills),
+      bestGame: Math.max(...(p.kills||[0]).map(k => parseInt(k)||0))
+    }));
+    // Tri : 1er critère = total kills, 2ème critère (ex-aequo) = meilleure game
+    ranked.sort((a,b) => {
+      if (b.total !== a.total) return b.total - a.total;
+      return b.bestGame - a.bestGame;
+    });
     ranked.forEach((p,i) => { p.rank = i+1; });
     return ranked;
   }
