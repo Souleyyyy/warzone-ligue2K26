@@ -318,84 +318,36 @@ const App = (() => {
     reader.readAsDataURL(file);
   }
 
-  function downloadData() { WZ.downloadJSON(); toast('data.json téléchargé ✓','ok'); }
+  function downloadData() {
+    WZ.downloadJSON();
+    toast('data.json téléchargé ✓ — dépose-le maintenant sur GitHub !','ok',5000);
+  }
 
   function handleExcel(file) {
     if(!file)return;
     const stEl=document.getElementById('drop-status');
-    if(stEl){stEl.style.display='block';stEl.textContent='⏳ Lecture...';stEl.style.color='var(--text2)';}
+    const pubSec=document.getElementById('publish-section');
+    if(stEl){stEl.style.display='block';stEl.textContent='⏳ Lecture du fichier Excel...';stEl.style.color='var(--text2)';}
+    if(pubSec)pubSec.style.display='none';
     const reader=new FileReader();
     reader.onload=e=>{
       try {
         const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array',cellFormula:false,cellNF:false});
         const result=WZ.importExcel(wb);
-        if(stEl){stEl.textContent=`✓ ${result.ok}/13 feuilles importées`;stEl.style.color='var(--green)';}
-        toast('Excel importé ! Pense à publier via l\'onglet Publier 📡','ok',5000);
+        // Cacher le message et afficher le bouton publier
+        if(stEl)stEl.style.display='none';
+        if(pubSec)pubSec.style.display='block';
         buildKillsForm();
         if(curPage==='home')renderHome();
         if(curPage==='classement')renderClassement();
         if(curPage==='calendrier')renderCalendrier();
       } catch(err){
         if(stEl){stEl.textContent='✗ Erreur : '+err.message;stEl.style.color='var(--red)';}
-        toast('Erreur import','err');
+        toast('Erreur import Excel','err');
+        console.error(err);
       }
     };
     reader.readAsArrayBuffer(file);
   }
 
-  async function confirmReset(all) {
-    const msg=all?'RESET TOTAL : tout effacer ?':'RESET SCORES : effacer scores et sanctions ?';
-    if(!confirm(msg))return;
-    if(all)WZ.resetAll();else WZ.resetData();
-    buildKillsForm();buildSancForm();render(curPage);
-    toast(all?'Reset total ✓':'Scores réinitialisés ✓','ok');
-  }
 
-  // ── DISPATCH ───────────────────────────────────────────────────────────────
-  function render(page) {
-    ({home:renderHome,classement:renderClassement,calendrier:renderCalendrier,
-      joueurs:renderJoueurs,admin:renderAdmin})[page]?.();
-  }
-
-  // ── INIT ───────────────────────────────────────────────────────────────────
-  async function init() {
-    document.querySelectorAll('[data-page]').forEach(a=>
-      a.addEventListener('click',e=>{e.preventDefault();go(a.dataset.page);})
-    );
-    const burgerBtn=document.getElementById('nav-burger-btn');
-    if(burgerBtn){
-      burgerBtn.addEventListener('click',function(e){e.stopPropagation();document.querySelector('.nav-mobile')?.classList.toggle('open');});
-    }
-    document.addEventListener('click',function(e){
-      const mn=document.querySelector('.nav-mobile'),bg=document.getElementById('nav-burger-btn');
-      if(mn&&mn.classList.contains('open')&&!mn.contains(e.target)&&e.target!==bg)mn.classList.remove('open');
-    });
-    window.addEventListener('scroll',()=>document.getElementById('nav')?.classList.toggle('scrolled',window.scrollY>20));
-    document.getElementById('admin-pw')?.addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
-    document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>renderTab(t.dataset.tab)));
-    const dz=document.getElementById('drop-zone');
-    if(dz){
-      dz.addEventListener('click',()=>document.getElementById('xl-file')?.click());
-      dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
-      dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
-      dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');handleExcel(e.dataTransfer.files[0]);});
-      document.getElementById('xl-file')?.addEventListener('change',e=>handleExcel(e.target.files[0]));
-    }
-
-    // Chargement depuis GitHub au démarrage (lecture publique, pas de token)
-    const result = await WZ.loadFromGitHub();
-    go('home');
-    if(result.ok) console.log('✓ Données chargées depuis GitHub');
-    else console.log('⚠ Données GitHub indisponibles, données vides affichées');
-  }
-
-  return {
-    init,go,toggleMobileMenu,closeMobileMenu,
-    tryLogin,logout,renderTab,
-    toggleVal,setKills,addSanc,clearSanc,
-    uploadPhoto,uploadLogo,downloadData,handleExcel,
-    confirmReset
-  };
-})();
-
-document.addEventListener('DOMContentLoaded', App.init);
