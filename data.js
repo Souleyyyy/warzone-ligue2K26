@@ -124,8 +124,8 @@ const WZ = (() => {
         return {validated, players};
       };
       if (!state.results[j]) state.results[j] = {};
-      state.results[j].A = readPartie(7,  valA);
-      state.results[j].B = readPartie(13, valB);
+      state.results[j].A = readPartie(5,  valA);
+      state.results[j].B = readPartie(12, valB);
       state.results[j].C = readPartie(19, valC);
     }
     ss(K.data, state);
@@ -167,41 +167,7 @@ const WZ = (() => {
   function getSanctions()  { return ls(K.sanc, {}); }
   function getState()      { return state; }
 
-  // ── Chargement depuis GitHub (CDN jsDelivr, lecture publique sans token) ──
-  async function loadFromGitHub() {
-    try {
-      const url = 'https://cdn.jsdelivr.net/gh/Souleyyyy/warzone-ligue2K26@main/data.json?t=' + Date.now();
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      if (data.results) {
-        state.results   = data.results;
-        state.sanctions = data.sanctions || {};
-        ss(K.sanc, state.sanctions);
-      }
-      return { ok: true };
-    } catch(err) {
-      console.warn('GitHub load failed:', err.message);
-      return { ok: false, error: err.message };
-    }
-  }
-
-  // ── Télécharger data.json ─────────────────────────────────────────────────
-  function downloadJSON() {
-    const content = JSON.stringify({
-      version: 1,
-      lastUpdate: new Date().toISOString(),
-      results: state.results,
-      sanctions: ls(K.sanc, {})
-    }, null, 2);
-    const blob = new Blob([content], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url; a.download = 'data.json'; a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  // ── Reset ─────────────────────────────────────────────────────────────────
+  // ── Reset ────────────────────────────────────────────────────────────────
   function resetData() {
     state = initState();
     ss(K.data, state);
@@ -215,7 +181,6 @@ const WZ = (() => {
 
   return {
     NAMES, TOP3, SCHEDULE, BONUS,
-    loadFromGitHub, downloadJSON,
     getStats, getJourneeStatus, getNextJournee, getTotalPartiesJouees,
     importExcel, setValidation, setKills,
     addSanction, clearSanction, getSanctions,
