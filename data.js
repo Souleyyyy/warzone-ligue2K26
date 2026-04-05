@@ -137,6 +137,25 @@ const WZ = (() => {
       state.results[j].C = readPartie(19, valC);
     }
     ss(K.data, state);
+
+    // Lire les sanctions depuis la feuille Classement (col U = _SANCTION)
+    // Structure : col P = nom, col U = sanction (row 4 à 16)
+    const wsClass = workbook.Sheets['🏆 Classement'];
+    if (wsClass) {
+      const sanctions = {};
+      for (let r = 4; r <= 16; r++) {
+        const nameCell = wsClass[XLSX.utils.encode_cell({r: r-1, c: 15})]; // col P (index 15)
+        const sancCell = wsClass[XLSX.utils.encode_cell({r: r-1, c: 20})]; // col U (index 20)
+        const name = nameCell ? String(nameCell.v || '').trim() : '';
+        const pts  = sancCell ? (parseInt(sancCell.v) || 0) : 0;
+        if (name && pts !== 0) sanctions[name] = pts;
+      }
+      // Sauvegarder les sanctions dans le localStorage
+      const existing = ls(K.sanc, {});
+      Object.assign(existing, sanctions);
+      ss(K.sanc, existing);
+    }
+
     return { ok: 13, fail: 0 };
   }
 
