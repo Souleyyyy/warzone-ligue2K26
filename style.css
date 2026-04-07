@@ -606,14 +606,24 @@ body {
   .players-grid { grid-template-columns: repeat(2,1fr); }
   .rules-grid { grid-template-columns: 1fr; }
   .sanc-grid { grid-template-columns: 1fr 1fr; }
-  /* Tableau classement : scroll horizontal, toutes colonnes visibles */
-  .rank-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .rank-head, .rank-row { min-width: 700px; }
+  /* Classement : rang | joueur | parties | kills | points */
+  .rank-head, .rank-row { grid-template-columns: 44px 1fr 64px 64px 80px; padding: 0 14px; }
+  .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
+  .rc-num { font-size: 12px; }
+  .rc-pts { font-size: 15px; }
 }
 @media(max-width:480px) {
   .hero-title { font-size: 42px; letter-spacing: -1px; }
   .players-grid { grid-template-columns: repeat(2,1fr); }
-  /* Tableau classement : scroll horizontal, toutes colonnes visibles comme desktop */
-  .rank-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .rank-head, .rank-row { min-width: 700px; }
+  /* Classement : rang | joueur | parties | kills | points */
+  .rank-head, .rank-row { grid-template-columns: 34px 1fr 48px 48px 64px; padding: 0 10px; }
+  .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
+  .rc { padding: 11px 0; }
+  .rc-rank { font-size: 14px; }
+  .rc-name { font-size: 13px; }
+  .rc-num { font-size: 11px; }
+  .rc-pts { font-size: 14px; }
+  .rc-avatar { width: 26px; height: 26px; font-size: 10px; }
+  .rc-player { gap: 7px; }
+  .rank-head { font-size: 7px; letter-spacing: 1px; }
 }
