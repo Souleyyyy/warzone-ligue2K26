@@ -593,8 +593,6 @@ body {
    RESPONSIVE
 ═══════════════════════════════════════════════ */
 @media(max-width:1024px) {
-  .rank-head, .rank-row { grid-template-columns: 52px 1fr 80px 80px 95px; }
-  .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
   .hero-stats { grid-template-columns: repeat(2,1fr); }
   .hero-cols { grid-template-columns: 1fr; }
 }
@@ -608,27 +606,14 @@ body {
   .players-grid { grid-template-columns: repeat(2,1fr); }
   .rules-grid { grid-template-columns: 1fr; }
   .sanc-grid { grid-template-columns: 1fr 1fr; }
-  .rank-head, .rank-row { grid-template-columns: 44px 1fr 60px 70px 88px; padding: 0 14px; }
-  .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
-  .rc-num { font-size: 12px; text-align: center; }
-  .rc-pts { font-size: 16px; }
+  /* Tableau classement : scroll horizontal, toutes colonnes visibles */
+  .rank-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .rank-head, .rank-row { min-width: 700px; }
 }
 @media(max-width:480px) {
-  /* Rang | Joueur | Parties | Kills | Points — 5 colonnes compactes */
-  .rank-head, .rank-row {
-    grid-template-columns: 30px 1fr 36px 40px 58px;
-    padding: 0 10px;
-  }
-  /* Masquer col 6+ (barre, moy, statut) */
-  .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
-  .rc { padding: 10px 0; }
-  .rc-pts { font-size: 14px; font-weight: 800; }
-  .rc-num { font-size: 11px; }
-  .rc-rank { font-size: 14px; }
-  .rc-name { font-size: 12px; }
-  .rc-avatar { width: 24px; height: 24px; font-size: 10px; }
-  .rc-player { gap: 7px; }
-  .rank-head { font-size: 7px; letter-spacing: 1px; }
   .hero-title { font-size: 42px; letter-spacing: -1px; }
   .players-grid { grid-template-columns: repeat(2,1fr); }
+  /* Tableau classement : scroll horizontal, toutes colonnes visibles comme desktop */
+  .rank-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .rank-head, .rank-row { min-width: 700px; }
 }
