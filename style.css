@@ -593,6 +593,8 @@ body {
    RESPONSIVE
 ═══════════════════════════════════════════════ */
 @media(max-width:1024px) {
+  .rank-head, .rank-row { grid-template-columns: 52px 1fr 80px 80px 95px; }
+  .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
   .hero-stats { grid-template-columns: repeat(2,1fr); }
   .hero-cols { grid-template-columns: 1fr; }
 }
@@ -606,24 +608,27 @@ body {
   .players-grid { grid-template-columns: repeat(2,1fr); }
   .rules-grid { grid-template-columns: 1fr; }
   .sanc-grid { grid-template-columns: 1fr 1fr; }
-  /* Classement : rang | joueur | parties | kills | points */
-  .rank-head, .rank-row { grid-template-columns: 44px 1fr 64px 64px 80px; padding: 0 14px; }
+  /* Rang | Joueur | Parties | Kills | Points — masquer barre/moy/statut */
+  .rank-head, .rank-row { grid-template-columns: 42px 1fr 58px 58px 76px; padding: 0 12px; }
   .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
   .rc-num { font-size: 12px; }
-  .rc-pts { font-size: 15px; }
+  .rc-pts { font-size: 14px; }
+  .rc-name { font-size: 14px; }
+  .rc-avatar { width: 30px; height: 30px; font-size: 11px; }
+  .rc-player { gap: 8px; }
 }
 @media(max-width:480px) {
   .hero-title { font-size: 42px; letter-spacing: -1px; }
   .players-grid { grid-template-columns: repeat(2,1fr); }
-  /* Classement : rang | joueur | parties | kills | points */
-  .rank-head, .rank-row { grid-template-columns: 34px 1fr 48px 48px 64px; padding: 0 10px; }
+  /* Rang | Joueur | Parties | Kills | Points — compact */
+  .rank-head, .rank-row { grid-template-columns: 30px 1fr 44px 44px 60px; padding: 0 8px; }
   .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
-  .rc { padding: 11px 0; }
-  .rc-rank { font-size: 14px; }
-  .rc-name { font-size: 13px; }
+  .rc { padding: 10px 0; }
+  .rc-rank { font-size: 13px; }
+  .rc-name { font-size: 12px; }
   .rc-num { font-size: 11px; }
-  .rc-pts { font-size: 14px; }
-  .rc-avatar { width: 26px; height: 26px; font-size: 10px; }
-  .rc-player { gap: 7px; }
-  .rank-head { font-size: 7px; letter-spacing: 1px; }
+  .rc-pts { font-size: 13px; }
+  .rc-avatar { width: 24px; height: 24px; font-size: 10px; border-width: 1px; }
+  .rc-player { gap: 6px; }
+  .rank-head { font-size: 7px; letter-spacing: 0.5px; }
 }
