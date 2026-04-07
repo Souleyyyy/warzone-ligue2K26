@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-06T22:37:40.137Z",
+  "lastUpdate": "2026-04-07T09:01:19.352Z",
   "results": {
     "1": {
       "A": {
@@ -141,46 +141,46 @@
     },
     "2": {
       "A": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Erico",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              4,
+              5,
+              4,
+              9,
+              7
             ]
           },
           {
             "name": "Adjimal",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              11,
+              12,
+              6,
+              5,
+              5
             ]
           },
           {
             "name": "Florian",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              4,
+              5,
+              4,
+              10,
+              6
             ]
           },
           {
             "name": "Okan",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              1,
+              9,
+              3,
+              6,
+              6
             ]
           }
         ]
@@ -1374,46 +1374,46 @@
     },
     "11": {
       "A": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Sofiane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              14,
+              5,
+              31,
+              19,
+              8
             ]
           },
           {
             "name": "Okan",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              4,
+              2,
+              9,
+              6,
+              5
             ]
           },
           {
             "name": "Daniel",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              5,
+              3,
+              4,
+              4,
+              5
             ]
           },
           {
             "name": "Erico",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              8,
+              2,
+              9,
+              10,
+              7
             ]
           }
         ]
