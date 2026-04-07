@@ -614,14 +614,22 @@ body {
   .rc-pts { font-size: 16px; }
 }
 @media(max-width:480px) {
-  .rank-head, .rank-row { grid-template-columns: 40px 1fr 56px 80px; }
-  .rank-head>*:nth-child(n+5), .rank-row>*:nth-child(n+5) { display: none; }
-  .rc { padding: 12px 0; }
-  .rc-num { font-size: 12px; text-align: center; width: 100%; }
-  .rc-pts { font-size: 16px; text-align: right; }
-  .rc-rank { font-size: 16px; }
-  .rc-name { font-size: 14px; }
-  .rc-avatar { width: 28px; height: 28px; font-size: 11px; }
+  /* Rang | Joueur | Kills | Points — 4 colonnes visibles, Parties masquée */
+  .rank-head, .rank-row {
+    grid-template-columns: 34px 1fr 44px 62px;
+  }
+  /* Masquer : col 3 (Parties), col 6 (barre), col 7 (moy), col 8 (statut) */
+  .rank-head>*:nth-child(3), .rank-row>*:nth-child(3) { display: none; }
+  .rank-head>*:nth-child(n+6), .rank-row>*:nth-child(n+6) { display: none; }
+  /* Repositionner Kills (col 4) et Points (col 5) dans la grille à 4 cols */
+  .rank-head>*:nth-child(4), .rank-row>*:nth-child(4) { grid-column: 3; }
+  .rank-head>*:nth-child(5), .rank-row>*:nth-child(5) { grid-column: 4; display: flex; }
+  .rc { padding: 11px 0; }
+  .rc-pts { font-size: 15px; font-weight: 800; }
+  .rc-num { font-size: 11px; }
+  .rc-rank { font-size: 15px; }
+  .rc-name { font-size: 13px; }
+  .rc-avatar { width: 26px; height: 26px; font-size: 10px; }
   .rank-head { font-size: 8px; }
   .hero-title { font-size: 42px; letter-spacing: -1px; }
   .players-grid { grid-template-columns: repeat(2,1fr); }
