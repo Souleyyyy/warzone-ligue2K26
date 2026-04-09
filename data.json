@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-08T09:06:21.724Z",
+  "lastUpdate": "2026-04-09T09:36:17.446Z",
   "results": {
     "1": {
       "A": {
@@ -368,46 +368,46 @@
         ]
       },
       "C": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Daniel",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              4,
+              9,
+              2,
+              9,
+              1
             ]
           },
           {
             "name": "Okan",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              8,
+              2,
+              10,
+              3,
+              4
             ]
           },
           {
             "name": "Mika",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              10,
+              11,
+              4,
+              9,
+              3
             ]
           },
           {
             "name": "Nassim",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              8,
+              3,
+              2,
+              7,
+              6
             ]
           }
         ]
@@ -505,46 +505,46 @@
         ]
       },
       "C": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Erico",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              2,
+              3,
+              6,
+              10,
+              10
             ]
           },
           {
             "name": "Souleymane",
             "kills": [
+              6,
               0,
-              0,
-              0,
-              0,
-              0
+              12,
+              9,
+              12
             ]
           },
           {
             "name": "Nassim",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              4,
+              3,
+              4,
+              8,
+              11
             ]
           },
           {
             "name": "Okan",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              5,
+              6,
+              6,
+              3,
+              7
             ]
           }
         ]
