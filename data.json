@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-10T14:41:01.691Z",
+  "lastUpdate": "2026-04-11T16:28:34.703Z",
   "results": {
     "1": {
       "A": {
@@ -916,46 +916,46 @@
         ]
       },
       "C": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Souleymane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              11,
+              4,
+              7,
+              11,
+              5
             ]
           },
           {
             "name": "Sallah",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              11,
+              10,
+              7,
+              12,
+              2
             ]
           },
           {
             "name": "Nassim",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              3,
+              7,
+              6,
+              10,
+              2
             ]
           },
           {
             "name": "Okan",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              7,
+              7,
+              10,
+              9,
+              3
             ]
           }
         ]
