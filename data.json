@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-12T22:35:09.426Z",
+  "lastUpdate": "2026-04-13T14:45:38.024Z",
   "results": {
     "1": {
       "A": {
@@ -552,46 +552,46 @@
     },
     "5": {
       "A": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Souleymane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              10,
+              11,
+              9,
+              14,
+              9
             ]
           },
           {
             "name": "Theo",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              4,
+              9,
+              11,
+              8,
+              5
             ]
           },
           {
             "name": "Sofiane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              14,
+              18,
+              15,
+              10,
+              10
             ]
           },
           {
             "name": "Sallah",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              6,
+              7,
+              7,
+              10,
+              7
             ]
           }
         ]
