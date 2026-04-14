@@ -1,6 +1,20 @@
 // ── WARZONE LEAGUE 2026 — STATS PAGE ────────────────────────────────────────
 
 function buildStatsPage() {
+  try {
+    _buildStatsPageInner();
+  } catch(err) {
+    console.error('Stats page error:', err);
+    const wrap = document.getElementById('stats-content');
+    if (wrap) wrap.innerHTML = `<div class="stats-empty">
+      <div style="font-size:32px;margin-bottom:12px">⚠️</div>
+      <div style="font-family:var(--font-title);font-size:18px;color:var(--red)">Erreur stats</div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text3);margin-top:8px">${err.message}</div>
+    </div>`;
+  }
+}
+
+function _buildStatsPageInner() {
   const state    = WZ.getState();
   const schedule = WZ.SCHEDULE;
   const NAMES    = WZ.NAMES;
@@ -210,7 +224,7 @@ function buildStatsPage() {
       <div class="chart-medal">${medals[i]}</div>
       <div class="chart-name">${t.name}<span class="chart-j">J${t.j}</span></div>
       <div class="chart-bar-wrap">
-        <div class="chart-bar" style="--bar-w:${Math.round(t.kills/maxK*100)}%;background:${barColors[i]};animation-delay:${i*0.12}s"></div>
+        <div class="chart-bar" data-w="${Math.round(t.kills/maxK*100)}%" style="width:0;background:${barColors[i]};transition:width 0.9s ease i*0.12s"></div>
       </div>
       <div class="chart-val" style="color:${barColors[i]}">${t.kills}</div>
     </div>`).join('');
@@ -254,7 +268,7 @@ function buildStatsPage() {
       <div class="reg-row">
         <div class="reg-name">${p.name}<span class="reg-badge" style="color:${color}">${label}</span></div>
         <div class="reg-bar-wrap">
-          <div class="reg-bar" style="--bar-w:${p.pct}%;background:${color};animation-delay:${i*0.05}s"></div>
+          <div class="reg-bar" data-w="${p.pct}%" style="width:0;background:${color};transition:width 0.9s ease i*0.05s"></div>
         </div>
         <div class="reg-val">
           <span style="color:${color}">${p.pct}%</span>
@@ -301,12 +315,15 @@ function buildStatsPage() {
     <div style="padding-bottom:56px"></div>
   `;
 
-  // Rendre les barres animées (CSS animation sur --bar-w)
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.chart-bar, .reg-bar').forEach(el => {
-      el.style.width = el.style.getPropertyValue('--bar-w') ||
-        getComputedStyle(el).getPropertyValue('--bar-w');
+  // Forcer la largeur des barres (compatibilité Safari/mobile)
+  setTimeout(() => {
+    document.querySelectorAll('.chart-bar').forEach(el => {
+      const w = el.dataset.w;
+      if (w) el.style.width = w;
     });
-  });
+    document.querySelectorAll('.reg-bar').forEach(el => {
+      const w = el.dataset.w;
+      if (w) el.style.width = w;
+    });
+  }, 50);
 }
-
