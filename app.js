@@ -460,8 +460,13 @@ const App = (() => {
   // ── DISPATCH ───────────────────────────────────────────────────────────────
   function render(page) {
     const map = {home:renderHome, classement:renderClassement,
-                 calendrier:renderCalendrier, joueurs:renderJoueurs, admin:renderAdmin};
+                 calendrier:renderCalendrier, joueurs:renderJoueurs,
+                 stats:renderStats, admin:renderAdmin};
     map[page]?.();
+  }
+
+  function renderStats() {
+    if (typeof buildStatsPage === 'function') buildStatsPage();
   }
 
   // ── INIT ───────────────────────────────────────────────────────────────────
