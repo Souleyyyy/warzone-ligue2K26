@@ -1,7 +1,7 @@
-// ── WARZONE LEAGUE 2026 — APP (v4 fixed) ────────────────────────────────────
+// ── WARZONE LEAGUE 2025 — APP (v4 fixed) ────────────────────────────────────
 const App = (() => {
 
-  const PASS = 'warzone2026';
+  const PASS = 'warzone2025';
   let adminOk   = sessionStorage.getItem('wz_ok')==='1';
   let curPage   = 'home';
   let activeTab = 'import';
@@ -55,7 +55,7 @@ const App = (() => {
     if (logoEl) {
       logoEl.innerHTML = logo
         ? `<img src="${logo}" alt="Warzone League" style="max-height:100px;max-width:280px;object-fit:contain">`
-        : `<div class="hero-tag"><div class="hero-tag-pulse"></div>WARZONE LEAGUE 2026</div>`;
+        : `<div class="hero-tag"><div class="hero-tag-pulse"></div>WARZONE LEAGUE 2025</div>`;
     }
     // Hero BG
     const heroBg = document.getElementById('hero-bg');
@@ -460,12 +460,17 @@ const App = (() => {
   // ── DISPATCH ───────────────────────────────────────────────────────────────
   function render(page) {
     const map = {home:renderHome, classement:renderClassement,
-                 calendrier:renderCalendrier, joueurs:renderJoueurs, admin:renderAdmin};
+                 calendrier:renderCalendrier, joueurs:renderJoueurs,
+                 stats:renderStats, admin:renderAdmin};
     map[page]?.();
   }
 
+  function renderStats() {
+    if (typeof buildStatsPage === 'function') buildStatsPage();
+  }
+
   // ── INIT ───────────────────────────────────────────────────────────────────
-  async function init() {
+  function init() {
     // Nav links (desktop + mobile)
     document.querySelectorAll('[data-page]').forEach(a=>
       a.addEventListener('click', e=>{ e.preventDefault(); go(a.dataset.page); })
@@ -510,24 +515,14 @@ const App = (() => {
       dz.addEventListener('drop', e=>{ e.preventDefault(); dz.classList.remove('drag'); handleExcel(e.dataTransfer.files[0]); });
       document.getElementById('xl-file')?.addEventListener('change', e=>handleExcel(e.target.files[0]));
     }
-    // Charger les données depuis GitHub AVANT d'afficher la page
-    // cache:'no-store' dans WZ.loadFromGitHub() garantit la fraîcheur
-    await WZ.loadFromGitHub();
-
     go('home');
-  }
-
-  // ── TÉLÉCHARGER DATA.JSON ────────────────────────────────────────────────
-  function downloadData() {
-    WZ.downloadJSON();
-    toast('data.json téléchargé ✓ — dépose-le sur GitHub !', 'ok');
   }
 
   return {
     init, go, toggleMobileMenu, closeMobileMenu,
     tryLogin, logout, renderTab,
     toggleVal, setKills, addSanc, clearSanc,
-    uploadPhoto, uploadLogo, confirmReset, downloadData
+    uploadPhoto, uploadLogo, confirmReset
   };
 })();
 
