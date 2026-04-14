@@ -56,13 +56,23 @@ function buildStatsPage() {
         ps.killsParGame.push({ j: day.j, partie: p, kills: k });
         if (pl.rank === 1) ps.nb1er++;
         if (pl.rank === 2) ps.nb2e++;
-        if (k > ps.killsMax1Game) ps.killsMax1Game = k;
-        if (k < ps.killsMin1Game) ps.killsMin1Game = k;
+        // Max/min sur UNE seule manche parmi les 5
+        const manchesPlayer = pl.kills || [];
+        manchesPlayer.forEach(mk => {
+          const mkInt = parseInt(mk) || 0;
+          if (mkInt > ps.killsMax1Game) ps.killsMax1Game = mkInt;
+          if (mkInt < ps.killsMin1Game) ps.killsMin1Game = mkInt;
+        });
 
-        if (k > recordKillsGame.kills)
-          recordKillsGame = { kills: k, name: pl.name, j: day.j, partie: p };
-        if (k < worstKillsGame.kills && k >= 0)
-          worstKillsGame = { kills: k, name: pl.name, j: day.j, partie: p };
+        // Records sur UNE SEULE manche (1 des 5 games)
+        const mancheKills = pl.kills || [];
+        mancheKills.forEach((mk, mi) => {
+          const mkInt = parseInt(mk) || 0;
+          if (mkInt > recordKillsGame.kills)
+            recordKillsGame = { kills: mkInt, name: pl.name, j: day.j, partie: p, manche: mi+1 };
+          if (mkInt < worstKillsGame.kills && mkInt >= 0)
+            worstKillsGame = { kills: mkInt, name: pl.name, j: day.j, partie: p, manche: mi+1 };
+        });
 
         if (!joueurs_journee[pl.name]) joueurs_journee[pl.name] = 0;
         joueurs_journee[pl.name] += k;
@@ -116,18 +126,10 @@ function buildStatsPage() {
     ps.moyenne = ps.partiesJouees > 0 ? (ps.totalKills / ps.partiesJouees).toFixed(1) : '—';
     if (ps.killsMin1Game === Infinity) ps.killsMin1Game = 0;
     if (ps.killsMin1Journee === Infinity) ps.killsMin1Journee = 0;
+    ps.killsMax1Game = ps.killsMax1Game || 0;
   });
 
-  // Régularité = écart-type des kills par game (plus petit = plus régulier)
-  NAMES.forEach(n => {
-    const ps = playerStats[n];
-    if (ps.killsParGame.length < 2) { ps.regularite = null; return; }
-    const vals = ps.killsParGame.map(g => g.kills);
-    const mean = vals.reduce((s,v) => s+v, 0) / vals.length;
-    const variance = vals.reduce((s,v) => s + (v-mean)**2, 0) / vals.length;
-    ps.regularite = Math.sqrt(variance).toFixed(1);
-    ps.regulariteMean = mean.toFixed(1);
-  });
+
 
   // Top 5 journées
   top5Journees.sort((a,b) => b.kills - a.kills);
@@ -168,8 +170,8 @@ function buildStatsPage() {
 
   // Records spéciaux avec leurs couleurs DBZ
   const rec1 = `<div class="record-card record-pos" style="--accent:#e84b6a">
-    <div class="dbz-badge" style="--dbz-color:#e84b6a;--dbz-shadow:rgba(232,75,106,0.5)">
-      <div class="dbz-emoji">🔱</div><div class="dbz-label">SSJ4</div>
+    <div class="dbz-img-wrap">
+      <img src="dbz_goku_ssj4.png" alt="Goku SSJ4" class="dbz-img">
     </div>
     <div class="record-body">
       <div class="record-title">🔥 ROI DES KILLS</div>
@@ -179,8 +181,8 @@ function buildStatsPage() {
     </div></div>`;
 
   const rec2 = `<div class="record-card record-pos" style="--accent:#4be8ff">
-    <div class="dbz-badge" style="--dbz-color:#4be8ff;--dbz-shadow:rgba(75,232,255,0.5)">
-      <div class="dbz-emoji">⚡</div><div class="dbz-label">SSJ2</div>
+    <div class="dbz-img-wrap">
+      <img src="dbz_gohan_ssj2.jpg" alt="Gohan SSJ2" class="dbz-img">
     </div>
     <div class="record-body">
       <div class="record-title">⚡ OUTSIDER</div>
@@ -190,19 +192,19 @@ function buildStatsPage() {
     </div></div>`;
 
   const rec3 = `<div class="record-card record-pos">
-    <div class="dbz-badge" style="--dbz-color:var(--gold);--dbz-shadow:rgba(232,184,75,0.5)">
-      <div class="dbz-emoji">✨</div><div class="dbz-label">SSJ3</div>
+    <div class="dbz-img-wrap">
+      <img src="dbz_goku_ssj3.jpg" alt="Goku SSJ3" class="dbz-img">
     </div>
     <div class="record-body">
       <div class="record-title">✨ GAME PARFAITE</div>
       <div class="record-sub">Max kills sur une game</div>
       <div class="record-name" style="color:var(--gold)">${recordKillsGame.name||'—'}</div>
-      <div class="record-value">${recordKillsGame.kills}<span class="record-unit"> kills · J${recordKillsGame.j}${recordKillsGame.partie}</span></div>
+      <div class="record-value">${recordKillsGame.kills}<span class="record-unit"> kills · J${recordKillsGame.j}${recordKillsGame.partie} G.${recordKillsGame.manche||'?'}</span></div>
     </div></div>`;
 
   const rec4 = `<div class="record-card record-neg">
-    <div class="dbz-badge" style="--dbz-color:#8a9ab5;--dbz-shadow:rgba(138,154,181,0.3)">
-      <div class="dbz-emoji">😅</div><div class="dbz-label">Krillin</div>
+    <div class="dbz-img-wrap">
+      <img src="dbz_krillin.webp" alt="Krillin" class="dbz-img">
     </div>
     <div class="record-body">
       <div class="record-title">😅 KRILLIN AWARD</div>
@@ -212,14 +214,14 @@ function buildStatsPage() {
     </div></div>`;
 
   const rec5 = `<div class="record-card record-neg">
-    <div class="dbz-badge" style="--dbz-color:#3d4a60;--dbz-shadow:rgba(61,74,96,0.6)">
-      <div class="dbz-emoji">💀</div><div class="dbz-label">Yamcha</div>
+    <div class="dbz-img-wrap">
+      <img src="dbz_yamcha.jpg" alt="Yamcha" class="dbz-img">
     </div>
     <div class="record-body">
       <div class="record-title">💀 YAMCHA AWARD</div>
       <div class="record-sub">Min kills sur une game</div>
       <div class="record-name">${worstKillsGame.name||'—'}</div>
-      <div class="record-value">${worstKillsGame.kills===Infinity?0:worstKillsGame.kills}<span class="record-unit"> kills · J${worstKillsGame.j}${worstKillsGame.partie}</span></div>
+      <div class="record-value">${worstKillsGame.kills===Infinity?0:worstKillsGame.kills}<span class="record-unit"> kills · J${worstKillsGame.j}${worstKillsGame.partie} G.${worstKillsGame.manche||'?'}</span></div>
     </div></div>`;
 
   // ── Top 5 graphique ──────────────────────────────────────────────────────
@@ -260,25 +262,29 @@ function buildStatsPage() {
   const evoHtml = buildEvolutionChart(cumulPoints, journeesJouees, classement);
 
   // ── Régularité ───────────────────────────────────────────────────────────
-  const regularPlayers = classement
-    .filter(p => playerStats[p.name].regularite !== null && p.partiesJouees >= 2)
-    .map(p => ({ ...p, reg: parseFloat(playerStats[p.name].regularite), mean: playerStats[p.name].regulariteMean }))
-    .sort((a,b) => a.reg - b.reg);
+  // Constance : % de fois dans le top 2 (1er ou 2e)
+  const constancePlayers = classement
+    .filter(p => p.partiesJouees >= 1)
+    .map(p => {
+      const ps = playerStats[p.name];
+      const top2 = ps.nb1er + ps.nb2e;
+      const pct  = Math.round(top2 / p.partiesJouees * 100);
+      return { ...p, top2, pct };
+    })
+    .sort((a,b) => b.pct - a.pct);
 
-  const maxReg = Math.max(...regularPlayers.map(p => p.reg), 1);
-  const regRows = regularPlayers.map((p,i) => {
-    const pct = Math.round((1 - p.reg/maxReg) * 100);
-    const color = i === 0 ? 'var(--green)' : i === regularPlayers.length-1 ? 'var(--red)' : 'var(--gold)';
-    const label = i === 0 ? '🏅 Plus régulier' : i === regularPlayers.length-1 ? '🎲 Plus aléatoire' : '';
+  const constanceRows = constancePlayers.map((p, i) => {
+    const color = p.pct >= 50 ? 'var(--green)' : p.pct >= 25 ? 'var(--gold)' : 'var(--red)';
+    const label = i === 0 ? ' 🏅 Le plus constant' : '';
     return `
       <div class="reg-row">
-        <div class="reg-name">${p.name}${label ? `<span class="reg-badge" style="color:${color}">${label}</span>` : ''}</div>
+        <div class="reg-name">${p.name}<span class="reg-badge" style="color:${color}">${label}</span></div>
         <div class="reg-bar-wrap">
-          <div class="reg-bar" style="--bar-w:${pct}%;background:${color};animation-delay:${i*0.06}s"></div>
+          <div class="reg-bar" style="--bar-w:${p.pct}%;background:${color};animation-delay:${i*0.05}s"></div>
         </div>
         <div class="reg-val">
-          <span style="color:${color}">±${p.reg}</span>
-          <span class="reg-mean">moy ${p.mean}K</span>
+          <span style="color:${color}">${p.pct}%</span>
+          <span class="reg-mean">${p.top2}/${p.partiesJouees} parties</span>
         </div>
       </div>`;
   }).join('');
@@ -304,8 +310,8 @@ function buildStatsPage() {
         <div class="focus-cell-head">🥇 1er</div>
         <div class="focus-cell-head">🥈 2e</div>
         <div class="focus-cell-head">Moy K</div>
-        <div class="focus-cell-head">⚡ Max game</div>
-        <div class="focus-cell-head">🔥 Max J</div>
+        <div class="focus-cell-head">⚡ Max manche</div>
+        <div class="focus-cell-head">🔥 Max journée</div>
       </div>
       ${focusRows}
     </div>
@@ -314,11 +320,11 @@ function buildStatsPage() {
     <div class="stats-section-label" style="margin-top:48px">// ÉVOLUTION DU CLASSEMENT</div>
     ${evoHtml}
 
-    <!-- RÉGULARITÉ -->
-    <div class="stats-section-label" style="margin-top:48px">// RÉGULARITÉ (écart-type kills)</div>
+    <!-- CONSTANCE -->
+    <div class="stats-section-label" style="margin-top:48px">// CONSTANCE — % de fois dans le TOP 2</div>
     <div class="chart-card">
-      <div class="chart-title">📐 Joueur le plus régulier — écart-type le plus faible = moins de variance</div>
-      <div class="chart-body" style="gap:10px">${regRows}</div>
+      <div class="chart-title">🎯 Taux de podium — nombre de fois 1er ou 2e sur toutes les parties jouées</div>
+      <div class="chart-body" style="gap:10px">${constanceRows}</div>
     </div>
     <div style="padding-bottom:56px"></div>
   `;
