@@ -30,10 +30,7 @@ function buildStatsPage() {
   let worstKillsGame           = { kills: Infinity, name: '', j: 0, partie: '' };
   const top5Journees = [];
 
-  // Points cumulés par joueur par journée (pour graphique évolution)
-  const cumulPoints = {}; // name -> {j -> pts cumulés}
-  NAMES.forEach(n => { cumulPoints[n] = {}; });
-  const journeesJouees = []; // liste ordonnée des journées avec au moins 1 partie validée
+  const journeesJouees = []; // journées jouées (pour constance)
 
   schedule.forEach(day => {
     const joueurs_journee = {};
@@ -97,27 +94,7 @@ function buildStatsPage() {
     });
   });
 
-  // Calcul des points cumulés pour l'évolution
-  // On recalcule depuis 0 journée par journée
-  const pointsCumuls = {};
-  NAMES.forEach(n => { pointsCumuls[n] = 0; });
 
-  journeesJouees.forEach(j => {
-    ['A','B','C'].forEach(p => {
-      const partie = state.results[j]?.[p];
-      if (!partie?.validated) return;
-      WZ.rankPartie(partie.players).forEach(pl => {
-        if (pointsCumuls[pl.name] !== undefined) {
-          pointsCumuls[pl.name] += pl.total + (WZ.BONUS[pl.rank] || 0);
-        }
-      });
-    });
-    NAMES.forEach(n => {
-      if (!cumulPoints[n]) cumulPoints[n] = {};
-      const sanc = state.sanctions?.[n] || 0;
-      cumulPoints[n][j] = pointsCumuls[n] + sanc;
-    });
-  });
 
   // Finalize
   NAMES.forEach(n => {
@@ -258,10 +235,7 @@ function buildStatsPage() {
       </div>`;
   }).join('');
 
-  // ── Graphique évolution (SVG) ────────────────────────────────────────────
-  const evoHtml = buildEvolutionChart(cumulPoints, journeesJouees, classement);
-
-  // ── Régularité ───────────────────────────────────────────────────────────
+  // ── Constance ────────────────────────────────────────────────────────────
   // Constance : % de fois dans le top 2 (1er ou 2e)
   const constancePlayers = classement
     .filter(p => p.partiesJouees >= 1)
@@ -316,9 +290,7 @@ function buildStatsPage() {
       ${focusRows}
     </div>
 
-    <!-- ÉVOLUTION -->
-    <div class="stats-section-label" style="margin-top:48px">// ÉVOLUTION DU CLASSEMENT</div>
-    ${evoHtml}
+
 
     <!-- CONSTANCE -->
     <div class="stats-section-label" style="margin-top:48px">// CONSTANCE — % de fois dans le TOP 2</div>
@@ -338,101 +310,3 @@ function buildStatsPage() {
   });
 }
 
-// ── Graphique SVG évolution ────────────────────────────────────────────────
-function buildEvolutionChart(cumulPoints, journees, classement) {
-  if (journees.length < 2) {
-    return `<div class="chart-card"><div class="chart-title" style="color:var(--text2)">// Disponible après 2 journées jouées</div></div>`;
-  }
-
-  const W = 700, H = 280, PAD = { t:20, r:20, b:36, l:46 };
-  const innerW = W - PAD.l - PAD.r;
-  const innerH = H - PAD.t - PAD.b;
-
-  // Joueurs actifs (au moins 1 partie)
-  const active = classement.filter(p => p.partiesJouees > 0).map(p => p.name);
-
-  // Max points pour l'échelle
-  let maxPts = 1;
-  active.forEach(name => {
-    journees.forEach(j => {
-      const v = cumulPoints[name]?.[j] || 0;
-      if (v > maxPts) maxPts = v;
-    });
-  });
-
-  // Couleurs pour chaque joueur
-  const palette = [
-    '#e8b84b','#4be880','#4be8ff','#e84b6a','#b44bff',
-    '#ff8c4b','#4b8cff','#ff4be8','#8cff4b','#ff4b8c',
-    '#4bffb4','#ffb44b','#b4ff4b'
-  ];
-
-  // Axes X
-  const xStep = innerW / (journees.length - 1);
-  const yScale = v => innerH - (v / maxPts) * innerH;
-
-  // Grille Y
-  const yTicks = 4;
-  let gridLines = '';
-  let yLabels = '';
-  for (let i = 0; i <= yTicks; i++) {
-    const y = PAD.t + (i / yTicks) * innerH;
-    const val = Math.round(maxPts * (1 - i/yTicks));
-    gridLines += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>`;
-    yLabels   += `<text x="${PAD.l-6}" y="${y+4}" fill="#3d4a60" font-size="9" text-anchor="end" font-family="monospace">${val}</text>`;
-  }
-
-  // Labels X (journées)
-  let xLabels = '';
-  journees.forEach((j, i) => {
-    const x = PAD.l + i * xStep;
-    xLabels += `<text x="${x}" y="${H-8}" fill="#3d4a60" font-size="9" text-anchor="middle" font-family="monospace">J${j}</text>`;
-  });
-
-  // Lignes des joueurs
-  let lines = '';
-  let dots  = '';
-  let legendItems = '';
-
-  active.forEach((name, ni) => {
-    const color = palette[ni % palette.length];
-    let pathD = '';
-    journees.forEach((j, i) => {
-      const v = cumulPoints[name]?.[j] || 0;
-      const x = PAD.l + i * xStep;
-      const y = PAD.t + yScale(v);
-      pathD += (i === 0 ? 'M' : 'L') + `${x.toFixed(1)},${y.toFixed(1)} `;
-    });
-
-    lines += `<path d="${pathD}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" class="evo-line" style="--line-color:${color}"/>`;
-
-    // Point final
-    const lastJ = journees[journees.length - 1];
-    const lastV = cumulPoints[name]?.[lastJ] || 0;
-    const lx = PAD.l + (journees.length - 1) * xStep;
-    const ly = PAD.t + yScale(lastV);
-    dots += `<circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="4" fill="${color}" stroke="${color}" stroke-width="1.5"/>`;
-
-    legendItems += `<div class="evo-legend-item">
-      <div style="width:14px;height:3px;background:${color};border-radius:2px;flex-shrink:0"></div>
-      <span>${name}</span>
-    </div>`;
-  });
-
-  return `
-    <div class="chart-card evo-card">
-      <div class="chart-title">📈 Points cumulés journée par journée</div>
-      <div class="evo-wrap">
-        <svg viewBox="0 0 ${W} ${H}" class="evo-svg" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <linearGradient id="gridFade" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="rgba(255,255,255,0.08)"/>
-              <stop offset="100%" stop-color="transparent"/>
-            </linearGradient>
-          </defs>
-          ${gridLines}${yLabels}${xLabels}${lines}${dots}
-        </svg>
-      </div>
-      <div class="evo-legend">${legendItems}</div>
-    </div>`;
-}
