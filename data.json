@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-18T13:17:03.992Z",
+  "lastUpdate": "2026-04-18T13:45:58.445Z",
   "results": {
     "1": {
       "A": {
@@ -689,45 +689,45 @@
     },
     "6": {
       "A": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Theo",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              6,
+              5,
+              5,
+              7,
+              2
             ]
           },
           {
             "name": "Sofiane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              12,
+              13,
+              9,
+              12,
+              1
             ]
           },
           {
             "name": "Okan",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              4,
+              3,
+              3,
+              5,
+              5
             ]
           },
           {
             "name": "Daniel",
             "kills": [
-              0,
-              0,
-              0,
-              0,
+              2,
+              5,
+              4,
+              3,
               0
             ]
           }
@@ -1793,7 +1793,7 @@
     "Mehdi": -5,
     "Ali": 0,
     "Florian": 0,
-    "Theo": 0,
+    "Theo": -20,
     "Sofiane": 0,
     "Nassim": 0,
     "Souleymane": 0,
