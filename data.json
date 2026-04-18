@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-18T13:45:58.445Z",
+  "lastUpdate": "2026-04-18T15:17:58.390Z",
   "results": {
     "1": {
       "A": {
@@ -231,46 +231,46 @@
         ]
       },
       "C": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Ali",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              16,
+              10,
+              8,
+              20,
+              15
             ]
           },
           {
             "name": "Daniel",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              9,
+              10,
+              4,
+              8,
+              17
             ]
           },
           {
             "name": "Souleymane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              3,
+              10,
+              2,
+              1,
+              10
             ]
           },
           {
             "name": "Mehdi",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              17,
+              15,
+              5,
+              13,
+              13
             ]
           }
         ]
