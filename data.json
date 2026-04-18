@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-16T23:24:38.464Z",
+  "lastUpdate": "2026-04-18T13:17:03.992Z",
   "results": {
     "1": {
       "A": {
@@ -1327,46 +1327,46 @@
         ]
       },
       "C": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Mika",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              5,
+              7,
+              4,
+              10,
+              10
             ]
           },
           {
             "name": "Erico",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              8,
+              4,
+              3,
+              11,
+              3
             ]
           },
           {
             "name": "Florian",
             "kills": [
+              10,
               0,
-              0,
-              0,
-              0,
-              0
+              4,
+              11,
+              7
             ]
           },
           {
             "name": "Souleymane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              8,
+              3,
+              5,
+              9,
+              6
             ]
           }
         ]
