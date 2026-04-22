@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-20T21:19:09.516Z",
+  "lastUpdate": "2026-04-22T23:20:52.895Z",
   "results": {
     "1": {
       "A": {
@@ -1648,46 +1648,46 @@
     },
     "13": {
       "A": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Mehdi",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              19,
+              11,
+              19,
+              2,
+              8
             ]
           },
           {
             "name": "Ali",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              14,
+              19,
+              25,
+              11,
+              11
             ]
           },
           {
             "name": "Souleymane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              7,
+              12,
+              10,
+              7,
+              7
             ]
           },
           {
             "name": "Nassim",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              6,
+              11,
+              5,
+              2,
+              2
             ]
           }
         ]
@@ -1738,46 +1738,46 @@
         ]
       },
       "C": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Mika",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              1,
+              10,
+              6,
+              12,
+              19
             ]
           },
           {
             "name": "Adjimal",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              7,
+              13,
+              16,
+              9,
+              7
             ]
           },
           {
             "name": "Erico",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              1,
+              9,
+              6,
+              8,
+              7
             ]
           },
           {
             "name": "Theo",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              4,
+              10,
+              4,
+              9,
+              8
             ]
           }
         ]
@@ -1795,7 +1795,7 @@
     "Florian": 0,
     "Theo": -20,
     "Sofiane": 0,
-    "Nassim": 0,
+    "Nassim": -10,
     "Souleymane": 0,
     "Okan": 0
   }
