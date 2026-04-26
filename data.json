@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-04-26T21:08:24.679Z",
+  "lastUpdate": "2026-04-26T21:20:58.649Z",
   "results": {
     "1": {
       "A": {
@@ -1786,7 +1786,7 @@
   },
   "sanctions": {
     "Erico": 0,
-    "Sallah": -30,
+    "Sallah": -40,
     "Adjimal": 0,
     "Mika": 0,
     "Daniel": 0,
