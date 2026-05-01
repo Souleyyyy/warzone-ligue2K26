@@ -28,6 +28,7 @@
       <li><a href="#" data-page="joueurs">Joueurs</a></li>
       <li><a href="#" data-page="reglement">Règlement</a></li>
       <li><a href="#" data-page="stats" class="nav-stats">Stats</a></li>
+      <li><a href="#" data-page="finale" class="nav-finale">🏆 Finale</a></li>
       <li><a href="#" data-page="admin" class="nav-admin">Admin</a></li>
     </ul>
     <button class="nav-burger" id="nav-burger-btn" aria-label="Menu">☰</button>
@@ -40,6 +41,7 @@
     <a href="#" data-page="joueurs">Joueurs</a>
     <a href="#" data-page="reglement">Règlement</a>
     <a href="#" data-page="stats" class="nav-stats">Stats</a>
+    <a href="#" data-page="finale" class="nav-finale">🏆 Finale</a>
     <a href="#" data-page="admin" class="nav-admin">Admin</a>
   </div>
 </nav>
@@ -286,6 +288,20 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════
+     FINALE
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-finale">
+  <div class="container">
+    <div class="page-hdr">
+      <div class="eyebrow">Warzone League 2026</div>
+      <h1 class="page-title">Phase <em>Finale</em></h1>
+      <p style="color:var(--text2);font-size:14px;margin-top:8px">Master Play-In · Play-In Final · Final 8 · Grande Finale</p>
+    </div>
+    <div id="finale-content"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
      ADMIN
 ══════════════════════════════════════════════════════ -->
 <div class="page" id="page-admin">
@@ -397,6 +413,7 @@
 <div class="toast-wrap" id="toasts"></div>
 
 <script src="data.js"></script>
+<script src="finale.js"></script>
 <script src="stats.js"></script>
 <script src="app.js"></script>
 </body>
