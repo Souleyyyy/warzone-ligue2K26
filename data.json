@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-05-01T11:10:12.857Z",
+  "lastUpdate": "2026-05-01T13:21:23.403Z",
   "results": {
     "1": {
       "A": {
@@ -1145,46 +1145,46 @@
         ]
       },
       "B": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Florian",
             "kills": [
+              7,
+              9,
+              7,
               0,
-              0,
-              0,
-              0,
-              0
+              13
             ]
           },
           {
             "name": "Okan",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              6,
+              7,
+              6,
+              4,
+              5
             ]
           },
           {
             "name": "Mika",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              6,
+              11,
+              4,
+              5,
+              11
             ]
           },
           {
             "name": "Sallah",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              7,
+              13,
+              8,
+              6,
+              12
             ]
           }
         ]
