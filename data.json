@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-05-01T13:21:23.403Z",
+  "lastUpdate": "2026-05-01T14:54:20.903Z",
   "results": {
     "1": {
       "A": {
@@ -1693,46 +1693,46 @@
         ]
       },
       "B": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Daniel",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              5,
+              4,
+              5,
+              7,
+              1
             ]
           },
           {
             "name": "Sallah",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              6,
+              6,
+              7,
+              13,
+              4
             ]
           },
           {
             "name": "Florian",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              5,
+              4,
+              15,
+              13,
+              2
             ]
           },
           {
             "name": "Sofiane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              8,
+              16,
+              15,
+              13,
+              7
             ]
           }
         ]
