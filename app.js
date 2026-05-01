@@ -1,7 +1,7 @@
-// ── WARZONE LEAGUE 2026 — APP (v4 fixed) ────────────────────────────────────
+// ── WARZONE LEAGUE 2025 — APP (v4 fixed) ────────────────────────────────────
 const App = (() => {
 
-  const PASS = 'warzone2026';
+  const PASS = 'warzone2025';
   let adminOk   = sessionStorage.getItem('wz_ok')==='1';
   let curPage   = 'home';
   let activeTab = 'import';
@@ -55,7 +55,7 @@ const App = (() => {
     if (logoEl) {
       logoEl.innerHTML = logo
         ? `<img src="${logo}" alt="Warzone League" style="max-height:100px;max-width:280px;object-fit:contain">`
-        : `<div class="hero-tag"><div class="hero-tag-pulse"></div>WARZONE LEAGUE 2026</div>`;
+        : `<div class="hero-tag"><div class="hero-tag-pulse"></div>WARZONE LEAGUE 2025</div>`;
     }
     // Hero BG
     const heroBg = document.getElementById('hero-bg');
@@ -461,8 +461,12 @@ const App = (() => {
   function render(page) {
     const map = {home:renderHome, classement:renderClassement,
                  calendrier:renderCalendrier, joueurs:renderJoueurs,
-                 stats:renderStats, admin:renderAdmin};
+                 stats:renderStats, finale:renderFinale, admin:renderAdmin};
     map[page]?.();
+  }
+
+  function renderFinale() {
+    if (typeof buildFinalePage === 'function') buildFinalePage();
   }
 
   function renderStats() {
