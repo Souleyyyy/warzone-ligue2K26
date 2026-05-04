@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-05-04T11:52:46.534Z",
+  "lastUpdate": "2026-05-04T12:30:00.000Z",
   "results": {
     "1": {
       "A": {
@@ -1798,5 +1798,198 @@
     "Nassim": -10,
     "Souleymane": 0,
     "Okan": 0
+  },
+  "finale": {
+    "masterPlayIn": {
+      "validated": true,
+      "players": [
+        {
+          "name": "Theo",
+          "kills": [
+            7,
+            4,
+            8,
+            4,
+            9
+          ]
+        },
+        {
+          "name": "Erico",
+          "kills": [
+            2,
+            3,
+            6,
+            4,
+            2
+          ]
+        },
+        {
+          "name": "Nassim",
+          "kills": [
+            4,
+            7,
+            12,
+            5,
+            5
+          ]
+        },
+        {
+          "name": "Okan",
+          "kills": [
+            2,
+            4,
+            2,
+            7,
+            2
+          ]
+        }
+      ]
+    },
+    "playIn": {
+      "validated": false,
+      "players": [
+        {
+          "name": "Souleymane",
+          "kills": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "Sallah",
+          "kills": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "",
+          "kills": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "",
+          "kills": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "groupes": {
+      "g1": {
+        "validated": false,
+        "players": [
+          {
+            "name": "Sofiane",
+            "kills": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "",
+            "kills": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "Adjimal",
+            "kills": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "Mika",
+            "kills": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "g2": {
+        "validated": false,
+        "players": [
+          {
+            "name": "Mehdi",
+            "kills": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "",
+            "kills": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "Ali",
+            "kills": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "name": "Florian",
+            "kills": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    "grandeFinale": {
+      "masterKills": [],
+      "mkWins": {},
+      "champion": null,
+      "g1q1": "Sofiane",
+      "g1q2": "Adjimal",
+      "g2q1": "Mehdi",
+      "g2q2": "Ali"
+    }
   }
 }
