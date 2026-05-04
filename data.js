@@ -1,4 +1,4 @@
-// ── WARZONE LEAGUE 2026 — DATA LAYER (v final) ───────────────────────────────
+// ── WARZONE LEAGUE 2025 — DATA LAYER (v final) ───────────────────────────────
 const WZ = (() => {
 
   const NAMES = ["Erico","Sallah","Adjimal","Mika","Daniel","Mehdi","Ali","Florian",
@@ -131,14 +131,129 @@ const WZ = (() => {
         const sancCell = wsClass[XLSX.utils.encode_cell({r: r-1, c: 20})]; // col U
         const name = nameCell ? String(nameCell.v || '').trim() : '';
         const pts  = sancCell ? (parseInt(sancCell.v) || 0) : 0;
-        if (name) newSanctions[name] = pts; // on stocke TOUS les joueurs (même 0)
+        if (name) newSanctions[name] = pts;
       }
-      state.sanctions = newSanctions; // remplace complètement les sanctions
+      state.sanctions = newSanctions;
     }
 
-    // 3. Sauvegarder tout en une seule clé
+    // 3. Lire les données de la Phase Finale
+    state.finale = importFinaleFromExcel(workbook);
+
+    // 4. Sauvegarder
     save();
     return { ok: 13, fail: 0 };
+  }
+
+  // ── Import Phase Finale depuis Excel ────────────────────────────────────────
+  function importFinaleFromExcel(wb) {
+    const cv = (ws, addr) => { const c = ws[addr]; return c ? c.v : null; };
+    const cell = (ws, r, c) => {
+      const addr = XLSX.utils.encode_cell({r: r-1, c: c-1});
+      return (wb.Sheets[wb.SheetNames[0]] && ws[addr]) ? ws[addr].v : null;
+    };
+
+    // Lire un match à 4 joueurs (lignes 6-9)
+    const readMatch4 = (sheetName) => {
+      const ws = wb.Sheets[sheetName];
+      if (!ws) return { validated: false, players: [] };
+      const getCell = (r, c) => {
+        const a = XLSX.utils.encode_cell({r: r-1, c: c-1});
+        return ws[a] ? ws[a].v : null;
+      };
+      const players = [];
+      let totalKills = 0;
+      for (let r = 6; r <= 9; r++) {
+        const name = String(getCell(r, 2) || '').trim();
+        const kills = [3,4,5,6,7].map(c => parseInt(getCell(r, c) || 0) || 0);
+        totalKills += kills.reduce((s,k) => s+k, 0);
+        players.push({ name, kills });
+      }
+      const status = String(getCell(6, 13) || '');
+      const validated = status.includes('Jou') && totalKills > 0;
+      return { validated, players };
+    };
+
+    const mpi = readMatch4('🔴 Master Play-In');
+    const pi  = readMatch4('⚔️ Play-In Final');
+    const g1  = readMatch4('🏟️ Final 8 - G1');
+    const g2  = readMatch4('🏟️ Final 8 - G2');
+
+    // Calculer les qualifiés pour la Grande Finale
+    const rankPlayers = (players) => {
+      return [...players]
+        .filter(p => p.name)
+        .sort((a,b) => {
+          const ka = a.kills.reduce((s,k)=>s+k,0);
+          const kb = b.kills.reduce((s,k)=>s+k,0);
+          if (kb !== ka) return kb - ka;
+          return Math.max(...b.kills) - Math.max(...a.kills);
+        });
+    };
+
+    // Grande Finale — lire les MK
+    const ws_gf = wb.Sheets['🏆 Grande Finale'];
+    const getGF = (r, c) => {
+      const a = XLSX.utils.encode_cell({r: r-1, c: c-1});
+      return ws_gf && ws_gf[a] ? ws_gf[a].v : null;
+    };
+
+    // Déterminer les 4 finalistes depuis les résultats G1/G2
+    const ranked_g1 = rankPlayers(g1.players);
+    const ranked_g2 = rankPlayers(g2.players);
+    const finalistes = g1.validated && g2.validated
+      ? [ranked_g1[0]?.name, ranked_g1[1]?.name, ranked_g2[0]?.name, ranked_g2[1]?.name].filter(Boolean)
+      : [];
+
+    // Lire les 5 MK (data rows: MK1=13-16, MK2=21-24, MK3=29-32, MK4=37-40, MK5=45-48)
+    const mkStartRows = [13, 21, 29, 37, 45];
+    const masterKills = [];
+    for (let i = 0; i < 5; i++) {
+      const baseRow = mkStartRows[i];
+      const status = String(getGF(baseRow, 13) || '');
+      const validated = status.includes('Jou');
+      if (!validated) continue;
+
+      const scores = {};
+      let hasKills = false;
+      for (let fi = 0; fi < 4; fi++) {
+        const r = baseRow + fi;
+        const name = finalistes[fi];
+        if (!name) continue;
+        // Kills en col D-H (cols 4-8)
+        const kills = [4,5,6,7,8].map(c => parseInt(getGF(r, c) || 0) || 0);
+        const total = kills.reduce((s,k) => s+k, 0);
+        scores[name] = total;
+        if (total > 0) hasKills = true;
+      }
+      if (!hasKills) continue;
+
+      // Gagnant = max kills
+      let winner = null, maxK = 0;
+      Object.entries(scores).forEach(([n,k]) => { if (k > maxK) { maxK = k; winner = n; } });
+      masterKills.push({ scores, winner });
+    }
+
+    // Compter victoires MK
+    const mkWins = {};
+    masterKills.forEach(mk => {
+      if (mk.winner) mkWins[mk.winner] = (mkWins[mk.winner] || 0) + 1;
+    });
+    const champion = Object.entries(mkWins).find(([,w]) => w >= 2)?.[0] || null;
+
+    return {
+      masterPlayIn: mpi,
+      playIn: pi,
+      groupes: { g1, g2 },
+      grandeFinale: {
+        masterKills,
+        mkWins,
+        champion,
+        g1q1: ranked_g1[0]?.name || null,
+        g1q2: ranked_g1[1]?.name || null,
+        g2q1: ranked_g2[0]?.name || null,
+        g2q2: ranked_g2[1]?.name || null,
+      }
+    };
   }
 
   // ── Mutations ──────────────────────────────────────────────────────────────
@@ -188,6 +303,7 @@ const WZ = (() => {
         if (!data.results) continue;
         state.results   = data.results;
         state.sanctions = data.sanctions || {};
+        if (data.finale) state.finale = data.finale;
         save();
         return { ok: true };
       } catch(e) { continue; }
@@ -197,12 +313,12 @@ const WZ = (() => {
 
   // ── GitHub : télécharger data.json ────────────────────────────────────────
   function downloadJSON() {
-    // Tout est dans state — une seule source de vérité
     const payload = JSON.stringify({
       version:    1,
       lastUpdate: new Date().toISOString(),
       results:    state.results,
-      sanctions:  state.sanctions || {}
+      sanctions:  state.sanctions || {},
+      finale:     state.finale    || null
     }, null, 2);
     const blob = new Blob([payload], { type: 'application/json' });
     const url  = URL.createObjectURL(blob);
@@ -211,6 +327,8 @@ const WZ = (() => {
     URL.revokeObjectURL(url);
   }
 
+  function getFinale() { return state.finale || null; }
+
   return {
     NAMES, TOP3, SCHEDULE, BONUS,
     loadFromGitHub, downloadJSON,
@@ -218,7 +336,7 @@ const WZ = (() => {
     importExcel, setValidation, setKills,
     addSanction, clearSanction, getSanctions,
     savePhoto, getPhoto, saveLogo, getLogo,
-    getState, sumKills, rankPartie,
+    getState, getFinale, sumKills, rankPartie,
     resetData, resetAll
   };
 })();
