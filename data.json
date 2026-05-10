@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-05-10T13:18:35.009Z",
+  "lastUpdate": "2026-05-10T14:00:00.000Z",
   "results": {
     "1": {
       "A": {
@@ -1905,7 +1905,7 @@
             ]
           },
           {
-            "name": "",
+            "name": "Souleymane",
             "kills": [
               0,
               0,
@@ -1950,7 +1950,7 @@
             ]
           },
           {
-            "name": "",
+            "name": "Sallah",
             "kills": [
               0,
               0,
@@ -1986,10 +1986,10 @@
       "masterKills": [],
       "mkWins": {},
       "champion": null,
-      "g1q1": "Sofiane",
-      "g1q2": "Adjimal",
-      "g2q1": "Mehdi",
-      "g2q2": "Ali"
+      "g1q1": null,
+      "g1q2": null,
+      "g2q1": null,
+      "g2q2": null
     }
   }
 }
