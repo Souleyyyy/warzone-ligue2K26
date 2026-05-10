@@ -198,6 +198,7 @@ const WZ = (() => {
     };
 
     // Déterminer les 4 finalistes depuis les résultats G1/G2
+    // Les qualifiés ne sont définis QUE si le groupe est validé (kills > 0)
     const ranked_g1 = rankPlayers(g1.players);
     const ranked_g2 = rankPlayers(g2.players);
     const finalistes = g1.validated && g2.validated
@@ -248,10 +249,11 @@ const WZ = (() => {
         masterKills,
         mkWins,
         champion,
-        g1q1: ranked_g1[0]?.name || null,
-        g1q2: ranked_g1[1]?.name || null,
-        g2q1: ranked_g2[0]?.name || null,
-        g2q2: ranked_g2[1]?.name || null,
+        // null tant que le groupe n'est pas validé
+        g1q1: g1.validated ? (ranked_g1[0]?.name || null) : null,
+        g1q2: g1.validated ? (ranked_g1[1]?.name || null) : null,
+        g2q1: g2.validated ? (ranked_g2[0]?.name || null) : null,
+        g2q2: g2.validated ? (ranked_g2[1]?.name || null) : null,
       }
     };
   }
