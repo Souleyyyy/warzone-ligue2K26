@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-05-11T09:58:59.698Z",
+  "lastUpdate": "2026-05-11T10:00:04.757Z",
   "results": {
     "1": {
       "A": {
@@ -1986,10 +1986,10 @@
       "masterKills": [
         {
           "scores": {
-            "Sofiane": 123,
-            "Adjimal": 70,
-            "Mehdi": 150,
-            "Ali": 132
+            "Sofiane": 70,
+            "Adjimal": 38,
+            "Mehdi": 85,
+            "Ali": 74
           },
           "winner": "Mehdi"
         }
