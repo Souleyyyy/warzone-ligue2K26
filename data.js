@@ -220,8 +220,8 @@ const WZ = (() => {
         const r = baseRow + fi;
         const name = finalistes[fi];
         if (!name) continue;
-        // Kills en col D-H (cols 4-8)
-        const kills = [4,5,6,7,8].map(c => parseInt(getGF(r, c) || 0) || 0);
+        // Kills en col C-G (cols 3-7)
+        const kills = [3,4,5,6,7].map(c => parseInt(getGF(r, c) || 0) || 0);
         const total = kills.reduce((s,k) => s+k, 0);
         scores[name] = total;
         if (total > 0) hasKills = true;
