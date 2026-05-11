@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-05-10T14:00:00.000Z",
+  "lastUpdate": "2026-05-11T09:48:53.278Z",
   "results": {
     "1": {
       "A": {
@@ -1892,104 +1892,116 @@
     },
     "groupes": {
       "g1": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Sofiane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              18,
+              11,
+              13,
+              12,
+              15
             ]
           },
           {
             "name": "Souleymane",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              5,
+              9,
+              4,
+              8,
+              7
             ]
           },
           {
             "name": "Adjimal",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              4,
+              12,
+              10,
+              13,
+              17
             ]
           },
           {
             "name": "Mika",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              6,
+              16,
+              12,
+              8,
+              11
             ]
           }
         ]
       },
       "g2": {
-        "validated": false,
+        "validated": true,
         "players": [
           {
             "name": "Mehdi",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              3,
+              14,
+              10,
+              18,
+              17
             ]
           },
           {
-            "name": "Sallah",
+            "name": "Theo",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              5,
+              7,
+              6,
+              1,
+              7
             ]
           },
           {
             "name": "Ali",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              11,
+              8,
+              9,
+              18,
+              15
             ]
           },
           {
             "name": "Florian",
             "kills": [
-              0,
-              0,
-              0,
-              0,
-              0
+              5,
+              13,
+              9,
+              14,
+              5
             ]
           }
         ]
       }
     },
     "grandeFinale": {
-      "masterKills": [],
-      "mkWins": {},
+      "masterKills": [
+        {
+          "scores": {
+            "Sofiane": 117,
+            "Adjimal": 70,
+            "Mehdi": 150,
+            "Ali": 132
+          },
+          "winner": "Mehdi"
+        }
+      ],
+      "mkWins": {
+        "Mehdi": 1
+      },
       "champion": null,
-      "g1q1": null,
-      "g1q2": null,
-      "g2q1": null,
-      "g2q2": null
+      "g1q1": "Sofiane",
+      "g1q2": "Adjimal",
+      "g2q1": "Mehdi",
+      "g2q2": "Ali"
     }
   }
 }
