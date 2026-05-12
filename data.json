@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdate": "2026-05-11T10:00:04.757Z",
+  "lastUpdate": "2026-05-12T12:30:45.569Z",
   "results": {
     "1": {
       "A": {
@@ -1992,12 +1992,21 @@
             "Ali": 74
           },
           "winner": "Mehdi"
+        },
+        {
+          "scores": {
+            "Sofiane": 55,
+            "Adjimal": 39,
+            "Mehdi": 72,
+            "Ali": 62
+          },
+          "winner": "Mehdi"
         }
       ],
       "mkWins": {
-        "Mehdi": 1
+        "Mehdi": 2
       },
-      "champion": null,
+      "champion": "Mehdi",
       "g1q1": "Sofiane",
       "g1q2": "Adjimal",
       "g2q1": "Mehdi",
